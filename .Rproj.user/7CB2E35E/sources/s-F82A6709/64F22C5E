@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1555814294064.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "64F22C5E",
+    "lastKnownWriteTime" : 1555896503,
+    "last_content_update" : 1555896503903,
+    "path" : "~/workspace/gsoap/R/gsoap_layout.R",
+    "project_path" : "R/gsoap_layout.R",
+    "properties" : {
+        "cursorPosition" : "166,2",
+        "scrollLine" : "155"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
