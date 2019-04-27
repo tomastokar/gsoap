@@ -13,10 +13,10 @@ create_gsoap_layout(x, genes, pvalues, splitter = ",",
   cluster.stat = "PBC", pam.boots = 100)
 }
 \arguments{
-\item{x}{a data frame with results of the gene set over-representation analysis.
-Must have a rownames indicating names of the instances and at least two columns,
-one of which contains gene members; and another one that contains p-values
-(raw or adjusted for multiple testing).}
+\item{x}{a data frame with the results of gene set over-representation analysis.
+Must have a rownames indicating names of the genes sets and at least two columns,
+one of which contains query gene members; and another one that contains respective
+p-values (raw or adjusted for multiple testing).}
 
 \item{genes}{a character or integer, indicating name or index of the column containing genes members.}
 
@@ -31,7 +31,7 @@ Options include (but are not limited to) \emph{jaccard} (default), \emph{cosine}
 \item{projection.method}{a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
 Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),}
 
-\item{scale.factor}{a positive real number to control dependence of the resulting circle radius on the number of gene members of the given instance.}
+\item{scale.factor}{a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.}
 
 \item{weighted}{a boolean indicating whether to apply weights
 (weight = \emph{-log10(p-value)}) when centrality and clustering are calculated.}
@@ -42,36 +42,36 @@ Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scal
 
 \item{do.clustering}{a boolean indicating whether to apply clustering.}
 
-\item{isomap.k}{a positive integer indicating number of k nearest neighbors of
+\item{isomap.k}{an integer indicating number of k nearest neighbors of
 the \emph{isomap} projection.}
 
-\item{tsne.perplexity}{a positive integer indicating \emph{tSNE} perplexity.}
+\item{tsne.perplexity}{an integer indicating \emph{tSNE} perplexity.}
 
-\item{cca.epochs}{a positive integer indicating \emph{CCA} training length.}
+\item{cca.epochs}{an integer indicating \emph{CCA} training length.}
 
-\item{no.clusters}{a positive integer indicating number of clusters, must be less than number of instances.}
+\item{no.clusters}{an integer indicating number of clusters, must be less than number of gene sets (rows).}
 
-\item{max.clusters}{a positive integer indicating maximum number of clusters to consider, must be at least two.}
+\item{max.clusters}{an integer indicating maximum number of clusters to consider, must be at least two.}
 
-\item{cluster.stat}{a character indicating statistic used to select optimal number of clusters.
+\item{cluster.stat}{an indicating statistic used to select optimal number of clusters.
 Options are \emph{PBC} (point biserial correlation; default), \emph{HG} (Hubert's samma),
 \emph{HGSD} (Hubert’s samma - Somer's D), \emph{ASW} (average silhouette width),
 \emph{ASWw} (Average weighted silhouette width), \emph{CH} (Calinski-Harabasz index),
 \emph{R2} (R-squared), \emph{CHsq} (Calinski-Harabasz index using squared distances),
 \emph{R2sq} (R-squared using squared distances), \emph{HC} (Hubert’s C coefficient).}
 
-\item{pam.boots}{a positive integer indicating number of boostrap used to be used when selecting number of clusters.}
+\item{pam.boots}{a positive integer indicating number of boostraps used to be used when selecting number of clusters.}
 }
 \value{
 A \code{gsoap} object that is a list comprising following components
 \itemize{
     \item \code{layout} data frame with x and y coordinates of
     the points representing the insttances, their size (radius) derived from
-    the number of gene members; instance weight (-log10(p-value)), centrality
+    the number of gene members; weight (-log10(p-value)), centrality
     and cluster membership.
     \item \code{stress} Kruskall stress caused by projection and circle packing.
-    \item \code{spcorr} Spearman correlation between the original instance distances/dissimilarities
-    and those obtained after projection and circle packing.
+    \item \code{spcorr} Spearman correlation between the original distances/dissimilarities
+    between gene sets and those obtained after projection and circle packing.
 }
 }
 \description{
@@ -79,6 +79,13 @@ Some description
 }
 \details{
 More description
+}
+\examples{
+data(pxgenes)
+
+l = create_gsoap_layout(pxgenes, 'Members', 'p.value')
+
+head(l$layout)
 }
 \author{
 Tomas Tokar <tomastokar@gmail.com>

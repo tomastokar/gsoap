@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1556323942442.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3D45CA8A",
+    "lastKnownWriteTime" : 1556323965,
+    "last_content_update" : 1556324155451,
+    "path" : "~/workspace/gsoap/R/pxgenes-data.R",
+    "project_path" : "R/pxgenes-data.R",
+    "properties" : {
+        "cursorPosition" : "2,44",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

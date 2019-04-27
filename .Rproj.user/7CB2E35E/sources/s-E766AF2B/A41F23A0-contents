@@ -1,0 +1,238 @@
+setwd('~/workspace/Asmaa/')
+
+# ---------------
+# Load libraries
+# ---------------
+library(openxlsx)
+library(pheatmap)
+library(ggplot2)
+library(reshape2)
+library(RColorBrewer)
+library(Hmisc)
+# ---------------------------
+# Load miRNA expression data
+# ---------------------------
+fname = './data/content/Asmaa_content_normalized_data.xlsx'
+content.edata = read.xlsx(fname, sheet = 'normalized.data')
+
+fname = './data/colon/Asmaa_normalized_data.xlsx'
+tissues.edata = read.xlsx(fname, sheet = 'normalized.data')
+
+# Keep only endogenous probes
+content.edata = subset(content.edata, Code.Class %in% c('Endogenous1', 'Endogenous2'))
+tissues.edata = subset(tissues.edata, Code.Class %in% c('Endogenous1', 'Endogenous2'))
+
+# Set probe names as rownames
+rownames(content.edata) = content.edata$Name
+rownames(tissues.edata) = tissues.edata$Name
+
+# Drop probe data
+content.edata = content.edata[,-c(1:3)]
+tissues.edata = tissues.edata[,-c(1:3)]
+
+# Get rid miRs with zero stand. dev.
+content.edata = content.edata[apply(content.edata, 1, sd) != 0,]
+tissues.edata = tissues.edata[apply(tissues.edata, 1, sd) != 0,]
+
+# -----------------------
+# Load samples meta data
+# -----------------------
+fname = './src/Asmaa_sample_annotation.txt'
+mdata = read.table(fname, sep = '\t', head = T)
+
+# Sample IDs
+sample.ids = paste0('X', mdata$SAMPLE.NO.)
+
+# Set sample IDs as rownames
+rownames(mdata) = sample.ids
+
+# Keep only certain columns
+mdata = mdata[,c('GROUP',	'DAM.NO.',	'PND')]
+
+# PND to numeric
+mdata$DAM.NO. = factor(mdata$DAM.NO.)
+
+# ---------------
+# Load taxa data
+# ---------------
+fname = './data/content/otu_table_final_normalized_rel_L6_males_reorganized.xlsx'
+taxa.data = read.xlsx(fname, startRow = 4, rowNames = T)
+colnames(taxa.data) = rownames(mdata)
+
+# Plot heatmap of all taxa
+pheatmap(t(taxa.data),
+         filename = './results/content_all_taxa.pdf',
+         width = 12.,
+         height = 12.5)
+
+# -------------------------------------------------
+# Calculate correlations between miRNA expression
+# and taxa abundance (pearson and spearman)
+# ------------------------------------------------
+pears.content = rcorr(t(taxa.data),t(content.edata), type = 'pearson')
+pears.tissues = rcorr(t(taxa.data),t(tissues.edata), type = 'pearson')
+
+pears.content$r = pears.content$r[rownames(taxa.data),rownames(content.edata)]
+pears.content$P = pears.content$P[rownames(taxa.data),rownames(content.edata)]
+pears.tissues$r = pears.tissues$r[rownames(taxa.data),rownames(tissues.edata)]
+pears.tissues$P = pears.tissues$P[rownames(taxa.data),rownames(tissues.edata)]
+
+
+pheatmap(t(pears.content$r),
+         filename = './results/Pearson_content_all.pdf',
+         cellwidth = 7,
+         cellheight = 7)
+
+pheatmap(t(pears.tissues$r),
+         filename = './results/Pearson_tissues_all.pdf',
+         cellwidth = 7,
+         cellheight = 7)
+
+pears.content$r_melt = melt(pears.content$r, value.name = 'corr')
+pears.content$P_melt = melt(pears.content$P, value.name = 'pval')
+pears.tissues$r_melt = melt(pears.tissues$r, value.name = 'corr')
+pears.tissues$P_melt = melt(pears.tissues$P, value.name = 'pval')
+
+pears.content$res = cbind(pears.content$r_melt, pears.content$P_melt['pval'])
+pears.tissues$res = cbind(pears.tissues$r_melt, pears.tissues$P_melt['pval'])
+
+pears.content$res$fdr = p.adjust(pears.content$res$pval, 'fdr')
+pears.tissues$res$fdr = p.adjust(pears.tissues$res$pval, 'fdr')
+
+pears.content$sig.res = subset(pears.content$res, fdr < 0.01)
+pears.tissues$sig.res = subset(pears.tissues$res, fdr < 0.01)
+
+fname = './results/miRNAs_content_taxa_pearson_correlations.xlsx'
+write.xlsx(pears.content[c('res', 'sig.res')], fname)
+
+fname = './results/miRNAs_tissue_taxa_pearson_correlations.xlsx'
+write.xlsx(pears.tissues[c('res', 'sig.res')], fname)
+
+pdf('./results/miRNAs_content_taxa_dependencies.pdf')
+for (i in 1:nrow(pears.content$sig.res)){
+  taxon = as.character(pears.content$sig.res$Var1[i])
+  mirna = as.character(pears.content$sig.res$Var2[i])
+  fdr = pears.content$sig.res$fdr[i]
+  r = pears.content$sig.res$corr[i]
+  title = paste0('R = ', round(r,2), '; FDR = ', round(fdr, 3))
+  x = as.numeric(taxa.data[taxon,])
+  y = as.numeric(content.edata[mirna,])
+  plot(x, y, main = title, xlab = taxon, ylab = mirna)
+}
+dev.off()
+
+pdf('./results/miRNAs_tissue_taxa_dependencies.pdf')
+for (i in 1:nrow(pears.tissues$sig.res)){
+  taxon = as.character(pears.tissues$sig.res$Var1[i])
+  mirna = as.character(pears.tissues$sig.res$Var2[i])
+  fdr = pears.tissues$sig.res$fdr[i]
+  r = pears.tissues$sig.res$corr[i]
+  title = paste0('R = ', round(r,2), '; FDR = ', round(fdr, 3))
+  x = as.numeric(taxa.data[taxon,])
+  y = as.numeric(tissues.edata[mirna,])
+  plot(x, y, main = title, xlab = taxon, ylab = mirna)
+}
+dev.off()
+
+# -----------------------------
+# Reduce to top 5 taxa by mean
+# (effectiely > 5% of abindance)
+# -----------------------------
+taxa.data = t(taxa.data[rowMeans(taxa.data)>0.05,])
+
+# Plot heatmap of selected taxa
+pheatmap(taxa.data,
+         filename = './results/content_selected_taxa.pdf',
+         annotation_row = mdata,
+         width = 4.5,
+         height = 12)
+
+# ------------------------------------
+# Assess colinearity of the taxa data
+# ------------------------------------
+cor.m = print(cor(taxa.data))
+print(abs(cor.m[lower.tri(cor.m)]))
+
+# --------------------------------
+# Plot samples taxa cor histogram
+# --------------------------------
+cmat = cor(t(taxa.data))
+pheatmap(cmat,
+         annotation_col = mdata,
+         filename = './results/content_samples_correlations_by_taxa.pdf')
+
+write.table(cmat,
+            './results/content_samples_correlations_by_taxa.csv',
+            sep = ',',
+            row.names = TRUE,
+            col.names = NA,
+            quote = F)
+
+# -----------------------------------------------------------------
+# Calculate multiple correlation and adjusted multiple correlation
+# -----------------------------------------------------------------
+adjust.for.mdata = function(y){
+  # Zero-order model to extraxt residuals
+  d = data.frame(y, mdata[,c(1, 3)])
+  colnames(d)[1] = 'y'
+  m0 = lm(y ~ ., data = d)
+  e = m0$residuals
+  return(e)
+}
+
+multicor.analysis = function(y){
+  # Regression
+  m = lm(y ~ taxa.data)
+
+  # Model summary
+  ms = summary(m)
+
+  # Get adjusted R-squared
+  R2 = ms$r.squared
+
+  # P-value
+  f = ms$fstatistic
+  p = pf(f[1],f[2],f[3],lower.tail=F)
+
+  # Put together
+  res = c(R2, p)
+
+  # Return
+  return(res)
+}
+# Calculate R2
+content.taxa.R2 = data.frame(t(apply(content.edata, 1, multicor.analysis)))
+tissues.taxa.R2 = data.frame(t(apply(tissues.edata, 1, multicor.analysis)))
+
+colnames(content.taxa.R2) = c('R2', 'p-value')
+colnames(tissues.taxa.R2) = c('R2', 'p-value')
+
+# Partiol R2
+part.content.taxa.R2 = data.frame(t(apply(content.edata, 1, function(x)multicor.analysis(adjust.for.mdata(x)))))
+part.tissues.taxa.R2 = data.frame(t(apply(tissues.edata, 1, function(x)multicor.analysis(adjust.for.mdata(x)))))
+
+colnames(part.content.taxa.R2) = c('R2', 'p-value')
+colnames(part.tissues.taxa.R2) = c('R2', 'p-value')
+
+# Adjust p-values
+content.taxa.R2$FDR = p.adjust(content.taxa.R2$`p-value`, method = 'fdr')
+tissues.taxa.R2$FDR = p.adjust(tissues.taxa.R2$`p-value`, method = 'fdr')
+
+part.content.taxa.R2$FDR = p.adjust(content.taxa.R2$`p-value`, method = 'fdr')
+part.tissues.taxa.R2$FDR = p.adjust(tissues.taxa.R2$`p-value`, method = 'fdr')
+
+# -------------------------------
+# Wrap results together and save
+# -------------------------------
+all.res = list(content.taxa.R2,
+               tissues.taxa.R2,
+               part.content.taxa.R2,
+               part.tissues.taxa.R2)
+
+names(all.res) = c('content', 'tissue', 'content.adj', 'tissue.adj')
+
+# Save
+fname = './results/miRNAs_taxa_association_R2.xlsx'
+write.xlsx(all.res, fname, row.names = TRUE)
+# Interesting content miRNAs: mmu-miR-883a-5p, mmu-miR-1961
+# Interesting tissue miRNAs: mmu-miR-1928

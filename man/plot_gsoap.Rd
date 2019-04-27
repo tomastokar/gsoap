@@ -19,38 +19,39 @@ plot_gsoap(layout, as.color = NULL, as.alpha = NULL,
   ylimits = c(-0.1, 1.1), void = FALSE)
 }
 \arguments{
-\item{layout}{a data frame with the result of the \code{\link{create_gsoap_layout}}.}
+\item{layout}{a data frame, a layout extracted from the gsoap object obtained from the \code{\link{create_gsoap_layout}}.}
 
-\item{as.color}{a character or integer, indicating name or index of the column used as color aesthetic.}
+\item{as.color}{a character or integer, indicating name or index of the column with color aesthetic.}
 
-\item{as.alpha}{a character or integer, indicating name or index of the column used as alpha aesthetic.}
+\item{as.alpha}{a character or integer, indicating name or index of the column with alpha aesthetic.}
 
-\item{which.labels}{a character or integer vector, indicating the rows whose names should be show in the plot}
+\item{which.labels}{a character or integer vector, indicating gene sets (rows)
+whose names (rownames) should be show in the plot}
 
-\item{show.size.guide}{a boolean indicate whether to show size guide.}
+\item{show.size.guide}{a boolean indicating whether to show size guide.}
 
-\item{show.color.guide}{a boolean indicate whether to show color guide.}
+\item{show.color.guide}{a boolean indicating whether to show color guide.}
 
 \item{size.guide.loc}{a numeric vector of length 2 with the size guide x and y coordinates.}
 
-\item{size.guide.no}{a integer indicating number of circles of the size guide.}
+\item{size.guide.no}{an integer indicating number of circles of the size guide.}
 
-\item{default.color}{a character indicating which color to be used if no color aesthetics is used.}
+\item{default.color}{a character indicating color to be used if no color aesthetics is used.}
 
-\item{default.alpha}{a character indicating which color to be used if no alpha aesthetics is used.}
+\item{default.alpha}{a value between 0 and 1 indicating alpha to be used if no alpha aesthetics is used.}
 
-\item{range.alpha}{= a numeric vector of length 2 with lower and upper limit of alpha range.}
+\item{range.alpha}{a numeric vector of length 2 with lower and upper limit of alpha range.}
 
-\item{viridis.option}{a character vector indicating which of the Viridis color should be used, options are \emph{viridis} (default),
-\emph{magma}, \emph{plasma}, \emph{inferno}, \emph{cividis}.}
+\item{viridis.option}{a character vector indicating Viridis color scale to be used,
+options include \emph{viridis} (default), \emph{magma}, \emph{plasma}, \emph{inferno}, \emph{cividis}.}
 
 \item{viridis.direction}{a direction of the Viridis color palette.}
 
 \item{viridis.range}{a numeric vector of length 2 with lower and upper limit of the Viridis color palette.}
 
-\item{label.alpha}{a positive real indicating the alpha of the labels.}
+\item{label.alpha}{a value between 0 and 1 indicating alpha of the labels.}
 
-\item{segment.alpha}{a positive real number indicating the alpha of the labels repels.}
+\item{segment.alpha}{a value between 0 and 1 indicating alpha of the labels repels.}
 
 \item{repel.xynudges}{a numeric vector of length 2 with horizontal and vertical adjustments to nudge the position of labels.}
 
@@ -58,29 +59,37 @@ plot_gsoap(layout, as.color = NULL, as.alpha = NULL,
 
 \item{repel.direction}{a character indicating direction in which to adjust position of labels, options are \emph{both} (default), \emph{x} and \emph{y}.}
 
-\item{base.fontsize}{a positive integer indicating base font size.}
+\item{base.fontsize}{an integer indicating base font size.}
 
-\item{size.guide.fontsize}{a positive integer indicating size guide font size.}
+\item{size.guide.fontsize}{an integer indicating size guide font size.}
 
-\item{label.fontsize}{a positive integer indicating labels font size.}
+\item{label.fontsize}{an integer indicating labels font size.}
 
 \item{title}{a text for the title.}
 
 \item{subtitle}{a text for the subtitle.}
 
-\item{xlabel}{a text for the x-axis.}
+\item{xlabel}{a text for the x-axis label.}
 
-\item{ylabel}{a text for the y-axis.}
+\item{ylabel}{a text for the y-axis label.}
 
-\item{xlimits}{a numeric vector of length 2 idnicating lower and upper x-axis limits}
+\item{xlimits}{a numeric vector of length 2 indicating lower and upper x-axis limits}
 
-\item{ylimits}{a numeric vector of length 2 idnicating lower and upper y-axis limits}
+\item{ylimits}{a numeric vector of length 2 indicating lower and upper y-axis limits}
 
 \item{void}{a boolean indicating whether theme void should be used.}
+}
+\value{
+A gsoap plot where individual gene sets are represented by circles,
+whose size reflects the number of query gene members of the given set,
+and whose mutual proximities reflect the number common gene members.
 }
 \description{
 Some description
 }
 \details{
 More description
+}
+\author{
+Tomas Tokar <tomastokar@gmail.com>
 }
