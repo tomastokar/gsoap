@@ -4,7 +4,7 @@
 \alias{create_gsoap_layout}
 \title{A function to create a layout for GSOAP plot}
 \usage{
-create_gsoap_layout(x, genes, pvalues, splitter = ",",
+create_gsoap_layout(x, genes, pvalues, splitter = "/",
   distance.method = "jaccard", projection.method = "iso",
   scale.factor = 1, weighted = TRUE, do.packing = TRUE,
   calc.centrality = TRUE, do.clustering = TRUE, isomap.k = 3,

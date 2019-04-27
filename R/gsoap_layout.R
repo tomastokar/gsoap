@@ -1,3 +1,4 @@
+#' @export create_gsoap_layout
 #' @import tsne
 #' @importFrom ProjectionBasedClustering Isomap SammonsMapping tSNE CCA KruskalStress
 #' @importFrom philentropy distance
@@ -187,7 +188,7 @@ pamlustering = function(dm, w, no.clusters = NULL, max.clusters = 8, cluster.sta
 create_gsoap_layout = function(x,
                                genes,
                                pvalues,
-                               splitter = ',',
+                               splitter = '/',
                                distance.method = 'jaccard',
                                projection.method = 'iso',
                                scale.factor = 1.0,

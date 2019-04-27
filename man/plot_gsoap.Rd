@@ -90,6 +90,13 @@ Some description
 \details{
 More description
 }
+\examples{
+data(pxgenes)
+
+l = create_gsoap_layout(pxgenes, 'Members', 'p.value')
+
+head(l$layout)
+}
 \author{
 Tomas Tokar <tomastokar@gmail.com>
 }

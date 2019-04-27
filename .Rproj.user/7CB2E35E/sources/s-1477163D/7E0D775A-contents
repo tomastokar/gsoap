@@ -1,5 +1,7 @@
+#' @export plot_gsoap
 #' @import ggplot2
 #' @importFrom ggforce geom_circle
+#' @importFrom ggforce geom_arc_bar
 #' @importFrom ggrepel geom_text_repel
 
 
@@ -156,7 +158,7 @@ plot_gsoap = function(layout,
   # Set default color and alpha
   # ----------------------------
   # Set defaults
-  update_geom_defaults("circle",
+  update_geom_defaults(ggforce::GeomCircle,
                        list(colours = default.color,
                             fill = default.color,
                             alpha = default.alpha))
@@ -254,7 +256,7 @@ plot_gsoap = function(layout,
                             vjust = repel.hvjust[2],
                             force = 10,
                             direction = repel.direction,
-                            segment.alpha = repel.alpha,
+                            segment.alpha = segment.alpha,
                             alpha = label.alpha,
                             color = 'black',
                             size = label.fontsize * 0.352777778,
