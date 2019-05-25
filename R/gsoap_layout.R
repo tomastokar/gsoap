@@ -1,5 +1,5 @@
 #' @export create_gsoap_layout
-#' @import tsne
+#' @importFrom tsne tsne
 #' @importFrom ProjectionBasedClustering Isomap SammonsMapping tSNE CCA KruskalStress
 #' @importFrom philentropy distance
 #' @importFrom packcircles circleRepelLayout
@@ -147,14 +147,16 @@ pamlustering = function(dm, w, no.clusters = NULL, max.clusters = 8, cluster.sta
 #' Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),
 #' @param scale.factor a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.
 #' @param weighted a boolean indicating whether to apply weights
-#' (weight = \emph{-log10(p-value)}) when centrality and clustering are calculated.
+#' (weight = \emph{1 / p-value}) when centrality and clustering are calculated.
+#' @param log10.weights a boolean indicating whether weights should undergo
+#' additional log10 tranformation
 #' @param do.packing a boolean indicating whether to apply circle packing.
 #' @param calc.centrality a boolean indicating whether to calculate centrality.
 #' @param do.clustering a boolean indicating whether to apply clustering.
 #' @param isomap.k an integer indicating number of k nearest neighbors of
 #' the \emph{isomap} projection.
 #' @param tsne.perplexity an integer indicating \emph{tSNE} perplexity.
-#' @param tsne.iterations an integer indicating maximum number of \emphPtSNE} iterations to perform.
+#' @param tsne.iterations an integer indicating maximum number of \emph{tSNE} iterations to perform.
 #' @param cca.epochs an integer indicating \emph{CCA} training length.
 #' @param no.clusters an integer indicating number of clusters, must be less than number of gene sets (rows).
 #' @param max.clusters an integer indicating maximum number of clusters to consider, must be at least two.
@@ -193,6 +195,7 @@ create_gsoap_layout = function(x,
                                projection.method = 'iso',
                                scale.factor = 1.0,
                                weighted = TRUE,
+                               log10.weights = TRUE,
                                do.packing = TRUE,
                                calc.centrality = TRUE,
                                do.clustering = TRUE,
@@ -286,9 +289,13 @@ create_gsoap_layout = function(x,
   # -----------------------
   # Extended functionality
   # -----------------------
+  # Add p-values to layout
   # Set weights
   if (weighted){
-    layout$Weight = -log10(x[,pvalues])
+    layout$Weight = 1. / x[,pvalues]
+    if (log10.weights){
+      layout$Weight = log10(layout$Weight)
+    }
   } else {
     layout$Weight = rep(1, nrow(layout))
   }

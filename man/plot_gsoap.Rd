@@ -80,7 +80,7 @@ options include \emph{viridis} (default), \emph{magma}, \emph{plasma}, \emph{inf
 \item{void}{a boolean indicating whether theme void should be used.}
 }
 \value{
-A gsoap plot where individual gene sets are represented by circles,
+A gsoap plot, where individual gene sets are represented by circles,
 whose size reflects the number of query gene members of the given set,
 and whose mutual proximities reflect the number common gene members.
 }
@@ -94,8 +94,8 @@ More description
 data(pxgenes)
 
 l = create_gsoap_layout(pxgenes, 'Members', 'p.value')
+plot_gsoap(l$layout, as.color = 'Cluster', as.alpha = 'Centrality')
 
-head(l$layout)
 }
 \author{
 Tomas Tokar <tomastokar@gmail.com>

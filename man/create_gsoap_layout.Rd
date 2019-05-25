@@ -6,11 +6,11 @@
 \usage{
 create_gsoap_layout(x, genes, pvalues, splitter = "/",
   distance.method = "jaccard", projection.method = "iso",
-  scale.factor = 1, weighted = TRUE, do.packing = TRUE,
-  calc.centrality = TRUE, do.clustering = TRUE, isomap.k = 3,
-  tsne.perplexity = 30, tsne.iterations = 1000, cca.epochs = 10,
-  cca.alpha0 = 0.5, no.clusters = NULL, max.clusters = 8,
-  cluster.stat = "PBC", pam.boots = 100)
+  scale.factor = 1, weighted = TRUE, log10.weights = TRUE,
+  do.packing = TRUE, calc.centrality = TRUE, do.clustering = TRUE,
+  isomap.k = 3, tsne.perplexity = 30, tsne.iterations = 1000,
+  cca.epochs = 10, cca.alpha0 = 0.5, no.clusters = NULL,
+  max.clusters = 8, cluster.stat = "PBC", pam.boots = 100)
 }
 \arguments{
 \item{x}{a data frame with the results of gene set over-representation analysis.
@@ -34,7 +34,10 @@ Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scal
 \item{scale.factor}{a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.}
 
 \item{weighted}{a boolean indicating whether to apply weights
-(weight = \emph{-log10(p-value)}) when centrality and clustering are calculated.}
+(weight = \emph{1 / p-value}) when centrality and clustering are calculated.}
+
+\item{log10.weights}{a boolean indicating whether weights should undergo
+additional log10 tranformation}
 
 \item{do.packing}{a boolean indicating whether to apply circle packing.}
 
@@ -46,6 +49,8 @@ Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scal
 the \emph{isomap} projection.}
 
 \item{tsne.perplexity}{an integer indicating \emph{tSNE} perplexity.}
+
+\item{tsne.iterations}{an integer indicating maximum number of \emph{tSNE} iterations to perform.}
 
 \item{cca.epochs}{an integer indicating \emph{CCA} training length.}
 

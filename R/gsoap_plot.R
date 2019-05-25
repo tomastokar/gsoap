@@ -96,7 +96,7 @@ geom_radius_legend = function(radius, x, y, no=4, font.size = 10, labeller) {
 #' @param ylimits a numeric vector of length 2 indicating lower and upper y-axis limits
 #' @param void a boolean indicating whether theme void should be used.
 #'
-#' @return A gsoap plot where individual gene sets are represented by circles,
+#' @return A gsoap plot, where individual gene sets are represented by circles,
 #' whose size reflects the number of query gene members of the given set,
 #' and whose mutual proximities reflect the number common gene members.
 #'
@@ -106,8 +106,8 @@ geom_radius_legend = function(radius, x, y, no=4, font.size = 10, labeller) {
 #' data(pxgenes)
 #'
 #' l = create_gsoap_layout(pxgenes, 'Members', 'p.value')
+#' plot_gsoap(l$layout, as.color = 'Cluster', as.alpha = 'Centrality')
 #'
-#' head(l$layout)
 plot_gsoap = function(layout,
                       as.color = NULL,
                       as.alpha = NULL,
