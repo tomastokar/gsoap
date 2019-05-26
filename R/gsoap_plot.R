@@ -1,7 +1,6 @@
 #' @export plot_gsoap
 #' @import ggplot2
-#' @importFrom ggforce geom_circle
-#' @importFrom ggforce geom_arc_bar
+#' @importFrom ggforce geom_circle geom_arc_bar
 #' @importFrom ggrepel geom_text_repel
 
 
