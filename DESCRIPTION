@@ -12,3 +12,5 @@ LazyData: true
 RoxygenNote: 6.1.1.9000
 Imports: tsne, ProjectionBasedClustering, philentropy, packcircles, 
     WeightedCluster, ggplot2, ggforce, ggrepel
+Suggests: 
+    testthat

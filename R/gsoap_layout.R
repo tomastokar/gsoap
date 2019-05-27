@@ -161,11 +161,19 @@ pamlustering = function(dm, w, no.clusters = NULL, max.clusters = 8, cluster.sta
 #' @param no.clusters an integer indicating number of clusters, must be less than number of gene sets (rows).
 #' @param max.clusters an integer indicating maximum number of clusters to consider, must be at least two.
 #' @param cluster.stat an indicating statistic used to select optimal number of clusters.
-#' Options are \emph{PBC} (point biserial correlation; default), \emph{HG} (Hubert's samma),
-#' \emph{HGSD} (Hubert’s samma - Somer's D), \emph{ASW} (average silhouette width),
-#' \emph{ASWw} (Average weighted silhouette width), \emph{CH} (Calinski-Harabasz index),
-#' \emph{R2} (R-squared), \emph{CHsq} (Calinski-Harabasz index using squared distances),
-#' \emph{R2sq} (R-squared using squared distances), \emph{HC} (Hubert’s C coefficient).
+#' Options are:
+#' \itemize{
+#'     \item \emph{PBC} (point biserial correlation; default)
+#'     \item \emph{HG} (Hubert's samma)
+#'     \item \emph{HGSD} (Hubert’s samma - Somer's D)
+#'     \item \emph{ASW} (average silhouette width)
+#'     \item \emph{ASWw} (Average weighted silhouette width)
+#'     \item \emph{CH} (Calinski-Harabasz index)
+#'     \item \emph{R2} (R-squared)
+#'     \item \emph{CHsq} (Calinski-Harabasz index using squared distances)
+#'     \item \emph{R2sq} (R-squared using squared distances)
+#'     \item \emph{HC} (Hubert’s C coefficient)
+#' }
 #' @param pam.boots a positive integer indicating number of boostraps used to be used when selecting number of clusters.
 #'
 #' @return A \code{gsoap} object that is a list comprising following components

@@ -59,11 +59,19 @@ the \emph{isomap} projection.}
 \item{max.clusters}{an integer indicating maximum number of clusters to consider, must be at least two.}
 
 \item{cluster.stat}{an indicating statistic used to select optimal number of clusters.
-Options are \emph{PBC} (point biserial correlation; default), \emph{HG} (Hubert's samma),
-\emph{HGSD} (Hubert’s samma - Somer's D), \emph{ASW} (average silhouette width),
-\emph{ASWw} (Average weighted silhouette width), \emph{CH} (Calinski-Harabasz index),
-\emph{R2} (R-squared), \emph{CHsq} (Calinski-Harabasz index using squared distances),
-\emph{R2sq} (R-squared using squared distances), \emph{HC} (Hubert’s C coefficient).}
+Options are:
+\itemize{
+    \item \emph{PBC} (point biserial correlation; default)
+    \item \emph{HG} (Hubert's samma)
+    \itme \emph{HGSD} (Hubert’s samma - Somer's D)
+    \item \emph{ASW} (average silhouette width)
+    \item \emph{ASWw} (Average weighted silhouette width)
+    \item \emph{CH} (Calinski-Harabasz index)
+    \item \emph{R2} (R-squared)
+    \item \emph{CHsq} (Calinski-Harabasz index using squared distances)
+    \item \emph{R2sq} (R-squared using squared distances)
+    \item \emph{HC} (Hubert’s C coefficient)
+}}
 
 \item{pam.boots}{a positive integer indicating number of boostraps used to be used when selecting number of clusters.}
 }
