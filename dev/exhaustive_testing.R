@@ -25,16 +25,20 @@ CLUSTER_STATS_OPTIONs = c('PBC',
                           'R2sq',
                           'HC')
 
+sample_bool = function(){
+  sample(c(TRUE, FALSE), 1)
+}
+
 N = 100
 all_args = list()
 for (i in 1:N){
   args = list('distance.method' = sample(DISTANCE_METHODs, 1),
               'projection.method' = sample(PROJECTION_METHODs, 1),
-              'weighted' = sample(c(TRUE, FALSE), 1),
-              'log10.weights' = sample(c(TRUE, FALSE), 1),
-              'do.packing' = sample(c(TRUE, FALSE), 1),
-              'calc.centrality' = sample(c(TRUE, FALSE), 1),
-              'do.clustering' = sample(c(TRUE, FALSE), 1),
+              'weighted' = sample_bool(),
+              'log10.weights' = sample_bool(),
+              'do.packing' = sample_bool(),
+              'calc.centrality' = sample_bool(),
+              'do.clustering' = sample_bool(),
               'cluster.stat' = sample(CLUSTER_STATS_OPTIONs, 1))
   all_args[[i]] = args
 }
