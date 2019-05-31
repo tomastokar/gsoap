@@ -277,8 +277,12 @@ create_gsoap_layout = function(x,
   layout = create_layout(xy, no.members, scale.factor = scale.factor)
   # Circle packing
   if (do.packing){
-    layout = setNames(packing_simple(layout), c('x', 'y', 'radius'))
+    layout = packing_simple(layout)
+  } else {
+    layout = data.frame(layout)
   }
+  # Set  colnames
+  layout = setNames(layout, c('x', 'y', 'radius'))
   # Set rownames
   rownames(layout) = rownames(x)
   # Calculate number of members
