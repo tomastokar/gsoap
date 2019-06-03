@@ -141,7 +141,7 @@ pamlustering = function(dm, w, no.clusters = NULL, max.clusters = 8, cluster.sta
 #' @param pvalues a character or integer, indicating name or index of the column containing p-values.
 #' @param splitter a character to be used as a delimiter to parse the genes column.
 #' @param distance.method a character indicating method used to calculate the distance/dissimilarity between instances.
-#' Options include (but are not limited to) \emph{jaccard} (default), \emph{cosine}, \emph{dice},
+#' Options include (but are not limited to) \emph{jaccard} (default), \emph{manhattan}, \emph{tanimoto},
 #' \emph{intersection}. For more details see \code{\link[philentropy]{distance}}.
 #' @param projection.method a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
 #' Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),
@@ -250,6 +250,22 @@ create_gsoap_layout = function(x,
   # Calculate distance matrix
   dist.mat = calc_distance_matrix(asc.mat,
                                   distance.method = distance.method)
+  # Check for zeros outside the diagonal
+  if (any(rowSums(dist.mat == 0) > 1)){
+    warning("Zero dissimilarity between non-identical entries.")
+    if (projection.method == 'mds'){
+      warning(paste('Projection method', dQuote(projection.method), 'cannot be used.'))
+      projection.method = 'tsne'
+      message(paste('Projection method set to', dQuote(projection.method)))
+    }
+    else if (projection.method == 'iso'){
+      warning(paste('Projection method', dQuote(projection.method), 'cannot be used.'))
+      projection.method = 'cca'
+      message(paste('Projection method set to', dQuote(projection.method)))
+    }
+
+  }
+
   # --------------------------
   # Do projection to 2d space
   # --------------------------

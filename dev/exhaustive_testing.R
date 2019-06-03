@@ -2,9 +2,9 @@ library(gsoap)
 data(pxgenes)
 
 DISTANCE_METHODs = c('jaccard',
-                     'cosine',
-                     'dice',
-                     'intersection')
+                     'manhattan',
+                     'intersection',
+                     'tanimoto')
 
 PROJECTION_METHODs = c('iso',
                        'mds',

@@ -25,7 +25,7 @@ p-values (raw or adjusted for multiple testing).}
 \item{splitter}{a character to be used as a delimiter to parse the genes column.}
 
 \item{distance.method}{a character indicating method used to calculate the distance/dissimilarity between instances.
-Options include (but are not limited to) \emph{jaccard} (default), \emph{cosine}, \emph{dice},
+Options include (but are not limited to) \emph{jaccard} (default), \emph{manhattan}, \emph{tanimoto},
 \emph{intersection}. For more details see \code{\link[philentropy]{distance}}.}
 
 \item{projection.method}{a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
@@ -63,7 +63,7 @@ Options are:
 \itemize{
     \item \emph{PBC} (point biserial correlation; default)
     \item \emph{HG} (Hubert's samma)
-    \itme \emph{HGSD} (Hubert’s samma - Somer's D)
+    \item \emph{HGSD} (Hubert’s samma - Somer's D)
     \item \emph{ASW} (average silhouette width)
     \item \emph{ASWw} (Average weighted silhouette width)
     \item \emph{CH} (Calinski-Harabasz index)
