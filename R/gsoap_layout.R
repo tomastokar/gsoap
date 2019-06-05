@@ -35,6 +35,22 @@ calc_distance_matrix = function(m, distance.method = 'jaccard'){
   return(dist.mat)
 }
 
+non.diag = function(m){
+  nd = upper.tri(m, diag = FALSE) | lower.tri(m, diag = FALSE)
+  return(nd)
+}
+
+resolve.nondiag.zeros = function(M, k){
+  n = nrow(M)
+  m = ncol(M)
+  nondiag.zeros = (M == 0 & non.diag(M))
+  d = 1 - (k - 1)/k
+  r = matrix(d, n, m)
+  e = rnorm(n * m, 0., d/2.5)
+  e = matrix(e, n, m)
+  M[nondiag.zeros] = r[nondiag.zeros] + e[nondiag.zeros]
+  return(M)
+}
 
 isomap_transformation = function(d, isomap.k = 3){
   res = ProjectionBasedClustering::Isomap(d,
@@ -118,7 +134,10 @@ packing_simple = function(x, packing.maxiter = 1e+6){
 
 pamlustering = function(dm, w, no.clusters = NULL, max.clusters = 8, cluster.stat = 'PBC', boots = 100){
   if (is.null(no.clusters)){
-    pam.stats = WeightedCluster::wcKMedRange(dm, 2:max.clusters, weights = w, R = boots)
+    pam.stats = WeightedCluster::wcKMedRange(dm,
+                                             2:max.clusters,
+                                             weights = w,
+                                             R = boots)
     no.clusters = summary(pam.stats)[cluster.stat, 1]
   }
   clusters = WeightedCluster::wcKMedoids(dm, no.clusters, weights = w, cluster.only = T)
@@ -248,22 +267,12 @@ create_gsoap_layout = function(x,
   # Get number of member genes
   no.members = rowSums(asc.mat)
   # Calculate distance matrix
-  dist.mat = calc_distance_matrix(asc.mat,
-                                  distance.method = distance.method)
-  # Check for zeros outside the diagonal
-  if (any(rowSums(dist.mat == 0) > 1)){
+  dist.mat = calc_distance_matrix(asc.mat, distance.method = distance.method)
+  # Check for zeros appart of the main diagonal
+  if (any(rowSums(dist.mat == 0.) > 1)){
     warning("Zero dissimilarity between non-identical entries.")
-    if (projection.method == 'mds'){
-      warning(paste('Projection method', dQuote(projection.method), 'cannot be used.'))
-      projection.method = 'tsne'
-      message(paste('Projection method set to', dQuote(projection.method)))
-    }
-    else if (projection.method == 'iso'){
-      warning(paste('Projection method', dQuote(projection.method), 'cannot be used.'))
-      projection.method = 'cca'
-      message(paste('Projection method set to', dQuote(projection.method)))
-    }
-
+    k = ncol(asc.mat)
+    dist.mat = resolve.nondiag.zeros(dist.mat, k)
   }
 
   # --------------------------
