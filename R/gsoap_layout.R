@@ -132,18 +132,67 @@ packing_simple = function(x, packing.maxiter = 1e+6){
 }
 
 
-pamlustering = function(dm, w, no.clusters = NULL, max.clusters = 8, cluster.stat = 'PBC', boots = 100){
-  if (is.null(no.clusters)){
-    pam.stats = WeightedCluster::wcKMedRange(dm,
-                                             2:max.clusters,
-                                             weights = w,
-                                             R = boots)
-    no.clusters = summary(pam.stats)[cluster.stat, 1]
+calc_closeness = function(dm, w){
+  closeness = 1.
+  if (class(dm) != 'matrix'){
+    dm = as.matrix(dm)
   }
-  clusters = WeightedCluster::wcKMedoids(dm, no.clusters, weights = w, cluster.only = T)
-  clusters = factor(rownames(dm)[clusters])
-  return(clusters)
+  if (all(dim(dm) > 1)){
+    closeness = 1. / apply(dm , 1, weighted.mean, w)
+  }
+  return(closeness)
 }
+
+
+intracluster_closeness = function(cl, dm, w){
+  icc = rep(1, length(cl))
+  for (i in unique(cl)){
+    idx = which(cl == i)
+    icc[idx] = calc_closeness(dm[idx, idx], w[idx])
+  }
+  return(icc)
+}
+
+
+annotate_clusters = function(cl, icc, names){
+  cn = names
+  for (i in unique(cl)){
+    idx = which(cl == i)
+    n = names[idx]
+    x = icc[idx]
+    cn[idx] = n[which.max(x)]
+  }
+  return(cn)
+}
+
+
+select_clustering = function(cls, dm, w, stat = 'meta'){
+  cq = lapply(cls, function(cl)WeightedCluster::wcClusterQuality(dm, cl, weights = w)$stats)
+  cq = data.frame(do.call(rbind, cq))
+  if (stat == 'meta'){
+    cq = apply(cq, 2, rank)/ncol(cq)
+    score = exp(rowMeans(log(cq)))
+  } else {
+    score = cq[,stat]
+  }
+  cl = cls[[which.max(score)]]
+  return(cl)
+}
+
+
+hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method = 'ward.D', cluster.stat = 'meta'){
+  hc = hclust(dist(dm), method = hc.method, members = w)
+  if (is.null(no.clusters)){
+    max.clusters = min(max.clusters, nrow(dm))
+    clustering_list = lapply(2:max.clusters, function(k)cutree(hc, k))
+    clustering = select_clustering(clustering_list, dm, w, stat = cluster.stat)
+  } else {
+    no.clusters = min(no.clusters, nrow(dm))
+    clustering = cutree(hc, no.clusters)
+  }
+  return(clustering)
+}
+
 
 #' A function to create a layout for GSOAP plot
 #'
@@ -159,29 +208,33 @@ pamlustering = function(dm, w, no.clusters = NULL, max.clusters = 8, cluster.sta
 #' @param genes a character or integer, indicating name or index of the column containing genes members.
 #' @param pvalues a character or integer, indicating name or index of the column containing p-values.
 #' @param splitter a character to be used as a delimiter to parse the genes column.
-#' @param distance.method a character indicating method used to calculate the distance/dissimilarity between instances.
-#' Options include (but are not limited to) \emph{jaccard} (default), \emph{manhattan}, \emph{tanimoto},
-#' \emph{intersection}. For more details see \code{\link[philentropy]{distance}}.
-#' @param projection.method a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
+#' @param distance a character indicating method used to calculate the distance/dissimilarity between instances.
+#' Options include (but are not limited to) \emph{jaccard} (default), \emph{manhattan}, \emph{dice},
+#' \emph{pearson}. For more details see \code{\link[philentropy]{distance}}.
+#' @param projection a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
 #' Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),
 #' @param scale.factor a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.
 #' @param weighted a boolean indicating whether to apply weights
 #' (weight = \emph{1 / p-value}) when centrality and clustering are calculated.
 #' @param log10.weights a boolean indicating whether weights should undergo
 #' additional log10 tranformation
-#' @param do.packing a boolean indicating whether to apply circle packing.
-#' @param calc.centrality a boolean indicating whether to calculate centrality.
-#' @param do.clustering a boolean indicating whether to apply clustering.
+#' @param packing a boolean indicating whether to apply circle packing.
+#' @param closeness a boolean indicating whether to calculate closeness.
 #' @param isomap.k an integer indicating number of k nearest neighbors of
 #' the \emph{isomap} projection.
 #' @param tsne.perplexity an integer indicating \emph{tSNE} perplexity.
 #' @param tsne.iterations an integer indicating maximum number of \emph{tSNE} iterations to perform.
 #' @param cca.epochs an integer indicating \emph{CCA} training length.
+#' @param clustering a boolean indicating whether to apply clustering.
+#' @param hc.method a character indicating method of hierarchical cluster to be used.
+#' Options include: \emph{ward.D} (default), \emph{ward.D2}, \emph{single}, \emph{complete},
+#' \emph{average}, \emph{mcquitty}, \emph{median} and \emph{centroid}.
 #' @param no.clusters an integer indicating number of clusters, must be less than number of gene sets (rows).
 #' @param max.clusters an integer indicating maximum number of clusters to consider, must be at least two.
 #' @param cluster.stat an indicating statistic used to select optimal number of clusters.
 #' Options are:
 #' \itemize{
+#'     \item \emph{meta} (default) is a combination of the methods listed below
 #'     \item \emph{PBC} (point biserial correlation; default)
 #'     \item \emph{HG} (Hubert's samma)
 #'     \item \emph{HGSD} (Hubert’s samma - Somer's D)
@@ -218,14 +271,15 @@ create_gsoap_layout = function(x,
                                genes,
                                pvalues,
                                splitter = '/',
-                               distance.method = 'jaccard',
-                               projection.method = 'iso',
+                               distance = 'jaccard',
+                               projection = 'iso',
                                scale.factor = 1.0,
                                weighted = TRUE,
                                log10.weights = TRUE,
-                               do.packing = TRUE,
-                               calc.centrality = TRUE,
-                               do.clustering = TRUE,
+                               packing = TRUE,
+                               closeness = TRUE,
+                               clustering = TRUE,
+                               hc.method = 'ward.D',
                                isomap.k = 3,
                                tsne.perplexity = 30,
                                tsne.iterations = 1e+3,
@@ -233,8 +287,7 @@ create_gsoap_layout = function(x,
                                cca.alpha0 = 0.5,
                                no.clusters = NULL,
                                max.clusters = 8,
-                               cluster.stat = 'PBC',
-                               pam.boots = 100){ # add has genes
+                               cluster.stat = 'meta'){
   # -------------
   # Check inputs
   # -------------
@@ -267,7 +320,7 @@ create_gsoap_layout = function(x,
   # Get number of member genes
   no.members = rowSums(asc.mat)
   # Calculate distance matrix
-  dist.mat = calc_distance_matrix(asc.mat, distance.method = distance.method)
+  dist.mat = calc_distance_matrix(asc.mat, distance.method = distance)
   # Check for zeros appart of the main diagonal
   if (any(rowSums(dist.mat == 0.) > 1)){
     warning("Zero dissimilarity between non-identical entries.")
@@ -278,20 +331,20 @@ create_gsoap_layout = function(x,
   # --------------------------
   # Do projection to 2d space
   # --------------------------
-  if (projection.method == 'iso'){
+  if (projection == 'iso'){
     proj = suppressMessages(isomap_transformation(dist.mat,
                                                   isomap.k = isomap.k))
   }
-  if (projection.method == 'mds'){
+  if (projection == 'mds'){
     #res = mds_transformation(d)
     proj = suppressMessages(sammons_tranformation(dist.mat))
   }
-  if (projection.method == 'cca'){
+  if (projection == 'cca'){
     proj = suppressMessages(cca_transformation(dist.mat,
                                                cca.epochs,
                                                cca.alpha0))
   }
-  if (projection.method == 'tsne'){
+  if (projection == 'tsne'){
     proj = suppressMessages(tsne_transformation(dist.mat,
                                                 tsne.perplexity,
                                                 tsne.iterations))
@@ -301,7 +354,7 @@ create_gsoap_layout = function(x,
   # Calculate circle radius
   layout = create_layout(xy, no.members, scale.factor = scale.factor)
   # Circle packing
-  if (do.packing){
+  if (packing){
     layout = packing_simple(layout)
   } else {
     layout = data.frame(layout)
@@ -320,8 +373,10 @@ create_gsoap_layout = function(x,
   dx = as.matrix(suppressMessages(philentropy::distance(layout[,1:2], method = 'euclidean')))
   # Calculate Kruskal stress after projection and packing
   stress = ProjectionBasedClustering::KruskalStress(dist.mat, dx)
+  message(paste('Kruskall stress :', sprintf('%1.3f', stress)))
   # Calculate spearman correlation
   spcorr = cor(c(dist.mat), c(dx), method = 'spearman')
+  message(paste('Rank correlation :', sprintf('%1.3f', spcorr)))
 
   # -----------------------
   # Extended functionality
@@ -337,21 +392,27 @@ create_gsoap_layout = function(x,
     layout$Weight = rep(1, nrow(layout))
   }
   # Calculate centrality and add to layout
-  if (calc.centrality){
-    layout$Centrality = apply(dist.mat, 1, weighted.mean, layout$Weight)
-    layout$Centrality = 1. - min_max_scale(layout$Centrality)
+  if (closeness){
+    layout$Closeness = calc_closeness(dist.mat, layout$Weight)
   }
   # Do clustering
-  if (do.clustering){
-    layout$Cluster = pamlustering(dist.mat,
+  if (clustering){
+    # Clustering
+    layout$Cluster = hkclustering(dist.mat,
                                   layout$Weight,
                                   no.clusters = no.clusters,
                                   max.clusters = max.clusters,
-                                  cluster.stat = cluster.stat,
-                                  boots = pam.boots)
+                                  hc.method = hc.method,
+                                  cluster.stat = cluster.stat)
+    # Calculate intracluster weights
+    layout$Intracluster_closeness = intracluster_closeness(layout$Cluster,
+                                                           dist.mat,
+                                                           layout$Weight)
+    # Add cluster names
+    layout$Cluster = annotate_clusters(layout$Cluster,
+                                       layout$Intracluster_closeness,
+                                       rownames(layout))
   }
-  # Wrap results together
-  res = setNames(list(layout, stress, spcorr), c('layout','stress','spcorr'))
   # Return
-  return(res)
+  return(layout)
 }

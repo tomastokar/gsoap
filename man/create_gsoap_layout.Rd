@@ -5,12 +5,12 @@
 \title{A function to create a layout for GSOAP plot}
 \usage{
 create_gsoap_layout(x, genes, pvalues, splitter = "/",
-  distance.method = "jaccard", projection.method = "iso",
-  scale.factor = 1, weighted = TRUE, log10.weights = TRUE,
-  do.packing = TRUE, calc.centrality = TRUE, do.clustering = TRUE,
+  distance = "jaccard", projection = "iso", scale.factor = 1,
+  weighted = TRUE, log10.weights = TRUE, packing = TRUE,
+  closeness = TRUE, clustering = TRUE, hc.method = "ward.D",
   isomap.k = 3, tsne.perplexity = 30, tsne.iterations = 1000,
   cca.epochs = 10, cca.alpha0 = 0.5, no.clusters = NULL,
-  max.clusters = 8, cluster.stat = "PBC", pam.boots = 100)
+  max.clusters = 8, cluster.stat = "meta")
 }
 \arguments{
 \item{x}{a data frame with the results of gene set over-representation analysis.
@@ -24,11 +24,11 @@ p-values (raw or adjusted for multiple testing).}
 
 \item{splitter}{a character to be used as a delimiter to parse the genes column.}
 
-\item{distance.method}{a character indicating method used to calculate the distance/dissimilarity between instances.
-Options include (but are not limited to) \emph{jaccard} (default), \emph{manhattan}, \emph{tanimoto},
-\emph{intersection}. For more details see \code{\link[philentropy]{distance}}.}
+\item{distance}{a character indicating method used to calculate the distance/dissimilarity between instances.
+Options include (but are not limited to) \emph{jaccard} (default), \emph{manhattan}, \emph{dice},
+\emph{pearson}. For more details see \code{\link[philentropy]{distance}}.}
 
-\item{projection.method}{a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
+\item{projection}{a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
 Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),}
 
 \item{scale.factor}{a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.}
@@ -39,11 +39,15 @@ Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scal
 \item{log10.weights}{a boolean indicating whether weights should undergo
 additional log10 tranformation}
 
-\item{do.packing}{a boolean indicating whether to apply circle packing.}
+\item{packing}{a boolean indicating whether to apply circle packing.}
 
-\item{calc.centrality}{a boolean indicating whether to calculate centrality.}
+\item{closeness}{a boolean indicating whether to calculate closeness.}
 
-\item{do.clustering}{a boolean indicating whether to apply clustering.}
+\item{clustering}{a boolean indicating whether to apply clustering.}
+
+\item{hc.method}{a character indicating method of hierarchical cluster to be used.
+Options include: \emph{ward.D} (default), \emph{ward.D2}, \emph{single}, \emph{complete},
+\emph{average}, \emph{mcquitty}, \emph{median} and \emph{centroid}.}
 
 \item{isomap.k}{an integer indicating number of k nearest neighbors of
 the \emph{isomap} projection.}
@@ -61,6 +65,7 @@ the \emph{isomap} projection.}
 \item{cluster.stat}{an indicating statistic used to select optimal number of clusters.
 Options are:
 \itemize{
+    \item \emph{meta} (default) is a combination of the methods listed below
     \item \emph{PBC} (point biserial correlation; default)
     \item \emph{HG} (Hubert's samma)
     \item \emph{HGSD} (Hubert’s samma - Somer's D)

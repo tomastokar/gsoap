@@ -3,8 +3,8 @@ data(pxgenes)
 
 DISTANCE_METHODs = c('jaccard',
                      'manhattan',
-                     'intersection',
-                     'tanimoto')
+                     'dice',
+                     'pearson')
 
 PROJECTION_METHODs = c('iso',
                        'mds',
@@ -12,10 +12,11 @@ PROJECTION_METHODs = c('iso',
                        'tsne')
 
 PACKING_OPTIONs = c(TRUE, FALSE)
-CENTRALITY_OPTIONs = c(TRUE, FALSE)
+CLOSENESS_OPTIONs = c(TRUE, FALSE)
 CLUSTERING_OPTIONs = c(TRUE, FALSE)
 
-CLUSTER_STATS_OPTIONs = c('PBC',
+CLUSTER_STATS_OPTIONs = c('meta',
+                          'PBC',
                           'HGSD',
                           'ASW',
                           'ASWw',
@@ -32,14 +33,14 @@ sample_bool = function(){
 N = 100
 all_args = list()
 for (i in 1:N){
-  args = list('distance.method' = sample(DISTANCE_METHODs, 1),
-              'projection.method' = sample(PROJECTION_METHODs, 1),
+  args = list('distance' = sample(DISTANCE_METHODs, 1),
+              'projection' = sample(PROJECTION_METHODs, 1),
               'weighted' = sample_bool(),
               'log10.weights' = sample_bool(),
-              'do.packing' = sample_bool(),
-              'calc.centrality' = sample_bool(),
-              'do.clustering' = sample_bool(),
-              'cluster.stat' = sample(CLUSTER_STATS_OPTIONs, 1))
+              'packing' = sample_bool(),
+              'closeness' = sample_bool(),
+              'clustering' = sample_bool(),
+              'cluster.stat' = sample(CLUSTER_STATS_OPTIONs, 1, prob = c(10, rep(1, 9))))
   all_args[[i]] = args
 }
 
@@ -50,13 +51,13 @@ for (i in 1:100){
   l = create_gsoap_layout(pxgenes,
                           'Members',
                           'p.value',
-                          distance.method = args$distance.method,
-                          projection.method = args$projection.method,
+                          distance = args$distance,
+                          projection = args$projection,
                           weighted = args$weighted,
                           log10.weights = args$log10.weights,
-                          do.packing = args$do.packing,
-                          calc.centrality = args$calc.centrality,
-                          do.clustering = args$do.clustering,
+                          packing = args$packing,
+                          closeness = args$closeness,
+                          clustering = args$clustering,
                           cluster.stat = args$cluster.stat)
 }
 
