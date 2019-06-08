@@ -1,4 +1,4 @@
-#' @export plot_gsoap
+#' @export gsoap_plot
 #' @import ggplot2
 #' @importFrom ggforce geom_circle geom_arc_bar
 #' @importFrom ggrepel geom_text_repel
@@ -107,7 +107,7 @@ geom_radius_legend = function(radius, x, y, no=4, font.size = 10, labeller) {
 #' l = create_gsoap_layout(pxgenes, 'Members', 'p.value')
 #' plot_gsoap(l$layout, as.color = 'Cluster', as.alpha = 'Centrality')
 #'
-plot_gsoap = function(layout,
+gsoap_plot = function(layout,
                       as.color = NULL,
                       as.alpha = NULL,
                       which.labels = NULL,
@@ -121,7 +121,7 @@ plot_gsoap = function(layout,
                       range.alpha = c(0.1, 0.9),
                       viridis.option = 'viridis',
                       viridis.direction = 1,
-                      viridis.range = c(0, 1), # ????
+                      viridis.range = c(0, 1),
                       label.alpha = 0.6,
                       segment.alpha = 0.5,
                       repel.xynudges = c(0.1, 0.1),

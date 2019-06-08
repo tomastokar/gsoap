@@ -1,4 +1,4 @@
-#' @export create_gsoap_layout
+#' @export gsoap_layout
 #' @importFrom tsne tsne
 #' @importFrom ProjectionBasedClustering Isomap SammonsMapping tSNE CCA KruskalStress
 #' @importFrom philentropy distance
@@ -267,27 +267,27 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #' l = create_gsoap_layout(pxgenes, 'Members', 'p.value')
 #'
 #' head(l$layout)
-create_gsoap_layout = function(x,
-                               genes,
-                               pvalues,
-                               splitter = '/',
-                               distance = 'jaccard',
-                               projection = 'iso',
-                               scale.factor = 1.0,
-                               weighted = TRUE,
-                               log10.weights = TRUE,
-                               packing = TRUE,
-                               closeness = TRUE,
-                               clustering = TRUE,
-                               hc.method = 'ward.D',
-                               isomap.k = 3,
-                               tsne.perplexity = 30,
-                               tsne.iterations = 1e+3,
-                               cca.epochs = 10,
-                               cca.alpha0 = 0.5,
-                               no.clusters = NULL,
-                               max.clusters = 8,
-                               cluster.stat = 'meta'){
+gsoap_layout = function(x,
+                        genes,
+                        pvalues,
+                        splitter = '/',
+                        distance = 'jaccard',
+                        projection = 'iso',
+                        scale.factor = 1.0,
+                        weighted = TRUE,
+                        log10.weights = TRUE,
+                        packing = TRUE,
+                        closeness = TRUE,
+                        clustering = TRUE,
+                        hc.method = 'ward.D',
+                        isomap.k = 3,
+                        tsne.perplexity = 30,
+                        tsne.iterations = 1e+3,
+                        cca.epochs = 10,
+                        cca.alpha0 = 0.5,
+                        no.clusters = NULL,
+                        max.clusters = 8,
+                        cluster.stat = 'meta'){
   # -------------
   # Check inputs
   # -------------
