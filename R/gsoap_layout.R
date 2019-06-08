@@ -264,7 +264,7 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #' @examples
 #' data(pxgenes)
 #'
-#' l = create_gsoap_layout(pxgenes, 'Members', 'p.value')
+#' l = gsoap_layout(pxgenes, 'Members', 'p.value')
 #'
 #' head(l$layout)
 gsoap_layout = function(x,

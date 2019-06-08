@@ -104,8 +104,8 @@ geom_radius_legend = function(radius, x, y, no=4, font.size = 10, labeller) {
 #' @examples
 #' data(pxgenes)
 #'
-#' l = create_gsoap_layout(pxgenes, 'Members', 'p.value')
-#' plot_gsoap(l$layout, as.color = 'Cluster', as.alpha = 'Centrality')
+#' l = gsoap_layout(pxgenes, 'Members', 'p.value')
+#' gsoap_plot(l$layout, as.color = 'Cluster', as.alpha = 'Centrality')
 #'
 gsoap_plot = function(layout,
                       as.color = NULL,

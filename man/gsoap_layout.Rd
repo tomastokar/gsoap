@@ -101,7 +101,7 @@ More description
 \examples{
 data(pxgenes)
 
-l = create_gsoap_layout(pxgenes, 'Members', 'p.value')
+l = gsoap_layout(pxgenes, 'Members', 'p.value')
 
 head(l$layout)
 }

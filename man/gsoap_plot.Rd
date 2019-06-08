@@ -93,8 +93,8 @@ More description
 \examples{
 data(pxgenes)
 
-l = create_gsoap_layout(pxgenes, 'Members', 'p.value')
-plot_gsoap(l$layout, as.color = 'Cluster', as.alpha = 'Centrality')
+l = gsoap_layout(pxgenes, 'Members', 'p.value')
+gsoap_plot(l$layout, as.color = 'Cluster', as.alpha = 'Centrality')
 
 }
 \author{
