@@ -1,6 +1,6 @@
 # gsoap
 
-A package for visualisation of Gene Set Over-representation Analysis results.
+A package for visualisation of gene set over-representation enrichment analysis results.
 
 ## Features
 
@@ -22,19 +22,29 @@ library(gsoap)
 ```S
 data("pxgenes")
 ```
-Dataset if R data.frame with columns:
-  * Source
-  * Pathway
-  * p.value
-  * FDR
-  * Members
+The example dataset contains results of the over-representation analysis of 72 differentially expressed genes from [Tokar et al. 2018]. The analysis was performed using Pathway Data Integration Portal (pathDIP) [Rahmati et al., 2016]. It is an R data.frame containing following columns:
+  * Source - original source of the pathway
+  * Pathway - pathway name
+  * p.value - statistical significance of the obtained enrichment
+  * FDR - false discovery rate of the obtained enrichment
+  * Members - list of query genes belonging to the given pathway (in the following format: ``GENE1/GENE2/..'')
   
 ### Create GSOAP layout
 ```S
-gsoap_layout(pxgenes, 'Members', 'p.value')
+layout = gsoap_layout(pxgenes, 'Members', 'p.value')
 ```
+Obtained layout is datta.frame containing following columns:
+  * x - x-coordinate of the circle representing given pathway
+  * y - y-coordinate of the circle representing given pathway
+  * radius - circle radius
+  * size - number of pathway gene members (effect size)
+  * Weight - pathway weight
+  * Closeness - pathway closeness
+  * Cluster - pathway cluster
+  * Intracluster_closeness - pathway intra-cluster closeness
 
-### Plot GSOAP layout
+### Create GSOAP plot
 ```S
 gsoap_plot(l, as.color = 'Cluster', as.alpha = 'Centrality')
 ```
+
