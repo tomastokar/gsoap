@@ -49,10 +49,10 @@ for (i in 1:N){
               'cluster.stat' = sample(CLUSTER_STATS_OPTIONs, 1, prob = c(10, rep(1, 9))))
   color = ifelse(args[['clustering']],
                  'cluster',
-                 sample(c('closeness', 'importance'), 1))
+                 sample(c('closeness', 'significance'), 1))
   alpha = ifelse(args[['clustering']],
                  'intracluster_closeness',
-                 'importance')
+                 'significance')
   viridis = sample(c('viridis', 'magma', 'plasma', 'inferno', 'cividis'), 1)
   args[['color']] = color
   args[['alpha']] = alpha

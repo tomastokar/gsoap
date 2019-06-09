@@ -1,6 +1,6 @@
 Version: 1.0
 
-RestoreWorkspace: No
+RestoreWorkspace: Yes
 SaveWorkspace: No
 AlwaysSaveHistory: Default
 
@@ -19,3 +19,5 @@ BuildType: Package
 PackageUseDevtools: Yes
 PackageInstallArgs: --no-multiarch --with-keep.source
 PackageRoxygenize: rd,collate,namespace
+
+QuitChildProcessesOnExit: Yes
