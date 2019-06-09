@@ -62,7 +62,7 @@ layout = layout[order(layout$significance, decreasing = TRUE),]
 gsoap_plot(layout, as.color = 'cluster', as.alpha = 'significance', which.label = 1:5)
 ```
 
-![gsoap_example](https://user-images.githubusercontent.com/46754141/59162816-94bb3d00-8ac5-11e9-9753-a555c3c05c24.png)
+![gsoap_example](https://user-images.githubusercontent.com/46754141/59162870-67bb5a00-8ac6-11e9-95b0-25e60fc3b97b.png)
 
 ## References
  * Tokar, Tomas, et al. "Differentially expressed microRNAs in lung adenocarcinoma invert effects of copy number aberrations of prognostic genes." Oncotarget 9.10 (2018): 9137.

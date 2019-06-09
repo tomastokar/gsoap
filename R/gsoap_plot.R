@@ -178,8 +178,8 @@ gsoap_plot = function(layout,
   # Set x and y labels
   p = p + labs(title = title,
                subtitle = subtitle,
-               xlab = xlabel,
-               ylab = ylabel)
+               x = xlabel,
+               y = ylabel)
   # --------------
   # Resolve sizer
   # --------------

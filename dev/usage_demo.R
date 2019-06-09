@@ -17,3 +17,6 @@ pdf('./img/gsoap_example.pdf', width = 7, height = 5)
 plot(p)
 dev.off()
 
+png('./img/gsoap_example.png', width = 7, height = 5, units = 'in', res = 900)
+plot(p)
+dev.off()
