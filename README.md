@@ -1,9 +1,21 @@
-# gsoap
+# G
 
-A package for visualisation of gene set over-representation enrichment analysis results.
+A package for visualisation of gene set over-representation enrichment analysis.
 
 ## Features
 
+Per dafault, `gsoap_layout` will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Importance of the instance is calculated as -log10(pvalue) and is used as a instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
+
+Obtained layout is an R data.frame containing following columns:
+  * x, y - coordinates of the circles representing pathways
+  * radius - circle radius
+  * size - number of pathway gene members (effect size)
+  * importance - pathway importance defined as -log10(p.value)
+  * closeness - pathway closeness
+  * cluster - pathway cluster
+  * intracluster_closeness - pathway intra-cluster closeness
+
+Layout can be then visualized by `gsoap_plot`, that allows user to select columns to be used as color and alpha aesthetics, as well as the indices or names of the instances which should be annotated by labels.
 
 ## Installation
 ```S
@@ -33,15 +45,6 @@ The example dataset contains results of the over-representation analysis of 72 d
 ```S
 layout = gsoap_layout(pxgenes, 'Members', 'p.value')
 ```
-Obtained layout is datta.frame containing following columns:
-  * x - x-coordinate of the circle representing given pathway
-  * y - y-coordinate of the circle representing given pathway
-  * radius - circle radius
-  * size - number of pathway gene members (effect size)
-  * importance - pathway importance defined as -log10(p.value)
-  * closeness - pathway closeness
-  * cluster - pathway cluster
-  * intracluster_closeness - pathway intra-cluster closeness
 
 ### Create GSOAP plot
 ```S
