@@ -48,3 +48,6 @@ Obtained layout is datta.frame containing following columns:
 gsoap_plot(layout, as.color = 'cluster', as.alpha = 'importance')
 ```
 
+## References
+ * Tokar, Tomas, et al. "Differentially expressed microRNAs in lung adenocarcinoma invert effects of copy number aberrations of prognostic genes." Oncotarget 9.10 (2018): 9137.
+ * Rahmati, Sara, et al. "pathDIP: an annotated resource for known and predicted human gene-pathway associations and pathway enrichment analysis." Nucleic acids research 45.D1 (2016): D419-D426.
