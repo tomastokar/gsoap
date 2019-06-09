@@ -41,7 +41,7 @@ data("pxgenes")
 The example dataset contains results of the over-representation analysis of 72 differentially expressed genes from [Tokar et al. 2018]. The analysis was performed using Pathway Data Integration Portal (pathDIP) [Rahmati et al., 2016]. 
 </p>
 
-It is an R data.frame that contains following columns:
+It is an R data.frame, whose rownames are pathway names and columns are:
   * Source - original source of the pathway
   * Pathway - pathway name
   * p.value - statistical significance of the obtained enrichment
