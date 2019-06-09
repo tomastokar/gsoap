@@ -7,9 +7,9 @@
 gsoap_layout(x, genes, pvalues, splitter = "/", distance = "jaccard",
   projection = "iso", scale.factor = 0.8, weighted = TRUE,
   packing = TRUE, clustering = TRUE, hc.method = "ward.D",
+  no.clusters = NULL, max.clusters = 8, cluster.stat = "meta",
   isomap.k = 3, tsne.perplexity = 30, tsne.iterations = 1000,
-  cca.epochs = 10, cca.alpha0 = 0.5, no.clusters = NULL,
-  max.clusters = 8, cluster.stat = "meta")
+  cca.epochs = 10, cca.alpha0 = 0.5)
 }
 \arguments{
 \item{x}{a data frame with the results of gene set over-representation analysis.
@@ -32,7 +32,8 @@ Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scal
 
 \item{scale.factor}{a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.}
 
-\item{weighted}{a boolean indicating whether to use weights when centrality and clustering are calculated.}
+\item{weighted}{a boolean indicating whether to use pathway \emph{importance}
+(-log10(pvalue)) as a weight when closeness and clustering are calculated.}
 
 \item{packing}{a boolean indicating whether to apply circle packing.}
 
@@ -41,15 +42,6 @@ Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scal
 \item{hc.method}{a character indicating method of hierarchical cluster to be used.
 Options include: \emph{ward.D} (default), \emph{ward.D2}, \emph{single}, \emph{complete},
 \emph{average}, \emph{mcquitty}, \emph{median} and \emph{centroid}.}
-
-\item{isomap.k}{an integer indicating number of k nearest neighbors of
-the \emph{isomap} projection.}
-
-\item{tsne.perplexity}{an integer indicating \emph{tSNE} perplexity.}
-
-\item{tsne.iterations}{an integer indicating maximum number of \emph{tSNE} iterations to perform.}
-
-\item{cca.epochs}{an integer indicating \emph{CCA} training length.}
 
 \item{no.clusters}{an integer indicating number of clusters, must be less than number of gene sets (rows).}
 
@@ -71,8 +63,16 @@ Options are:
     \item \emph{HC} (Hubert’s C coefficient)
 }}
 
-\item{log10.weights}{a boolean indicating whether weights should undergo
-additional log10 tranformation}
+\item{isomap.k}{an integer indicating number of k nearest neighbors of
+the \emph{isomap} projection.}
+
+\item{tsne.perplexity}{an integer indicating \emph{tSNE} perplexity.}
+
+\item{tsne.iterations}{an integer indicating maximum number of \emph{tSNE} iterations to perform.}
+
+\item{cca.epochs}{an integer indicating \emph{CCA} training length.}
+
+\item{cca.alpha0}{a positive real number indicating \emph{CCA} initial step size.}
 }
 \value{
 \code{layout} a data frame with x and y coordinates of

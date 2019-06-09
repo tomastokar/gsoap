@@ -214,15 +214,9 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #' @param projection a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
 #' Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),
 #' @param scale.factor a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.
-#' @param weighted a boolean indicating whether to use weights when centrality and clustering are calculated.
-#' @param log10.weights a boolean indicating whether weights should undergo
-#' additional log10 tranformation
+#' @param weighted a boolean indicating whether to use pathway \emph{importance}
+#' (-log10(pvalue)) as a weight when closeness and clustering are calculated.
 #' @param packing a boolean indicating whether to apply circle packing.
-#' @param isomap.k an integer indicating number of k nearest neighbors of
-#' the \emph{isomap} projection.
-#' @param tsne.perplexity an integer indicating \emph{tSNE} perplexity.
-#' @param tsne.iterations an integer indicating maximum number of \emph{tSNE} iterations to perform.
-#' @param cca.epochs an integer indicating \emph{CCA} training length.
 #' @param clustering a boolean indicating whether to apply clustering.
 #' @param hc.method a character indicating method of hierarchical cluster to be used.
 #' Options include: \emph{ward.D} (default), \emph{ward.D2}, \emph{single}, \emph{complete},
@@ -244,6 +238,13 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #'     \item \emph{R2sq} (R-squared using squared distances)
 #'     \item \emph{HC} (Hubert’s C coefficient)
 #' }
+#'
+#' @param isomap.k an integer indicating number of k nearest neighbors of
+#' the \emph{isomap} projection.
+#' @param tsne.perplexity an integer indicating \emph{tSNE} perplexity.
+#' @param tsne.iterations an integer indicating maximum number of \emph{tSNE} iterations to perform.
+#' @param cca.epochs an integer indicating \emph{CCA} training length.
+#' @param cca.alpha0 a positive real number indicating \emph{CCA} initial step size.
 #'
 #' @return \code{layout} a data frame with x and y coordinates of
 #'     the points representing the insttances, their size (radius) derived from
@@ -269,14 +270,14 @@ gsoap_layout = function(x,
                         packing = TRUE,
                         clustering = TRUE,
                         hc.method = 'ward.D',
+                        no.clusters = NULL,
+                        max.clusters = 8,
+                        cluster.stat = 'meta',
                         isomap.k = 3,
                         tsne.perplexity = 30,
                         tsne.iterations = 1e+3,
                         cca.epochs = 10,
-                        cca.alpha0 = 0.5,
-                        no.clusters = NULL,
-                        max.clusters = 8,
-                        cluster.stat = 'meta'){
+                        cca.alpha0 = 0.5){
   # -------------
   # Check inputs
   # -------------
