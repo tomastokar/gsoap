@@ -4,14 +4,14 @@ A package for visualisation of gene set over-representation enrichment analysis.
 
 ## Features
 <p align="justify">
-Per dafault, `gsoap_layout` will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Importance of the instance is calculated as *-log10(pvalue)* and is used as a instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
+Per dafault, `gsoap_layout` will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Significance of the instance is calculated as *-log10(pvalue)* and is used as a instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
 </p>
 
 Obtained layout is an R data.frame that contains following columns:
   * x, y - coordinates of the circles representing pathways
   * radius - circle radius
   * size - number of pathway gene members (effect size)
-  * importance - pathway importance defined as -log10(p.value)
+  * significance - pathway significance defined as -log10(p.value)
   * closeness - pathway closeness
   * cluster - pathway cluster
   * intracluster_closeness - pathway intra-cluster closeness
@@ -55,7 +55,11 @@ layout = gsoap_layout(pxgenes, 'Members', 'p.value')
 
 ### Create GSOAP plot
 ```S
-gsoap_plot(layout, as.color = 'cluster', as.alpha = 'importance')
+# Order instances by their significance
+layout = layout[order(layout$significance),]
+
+# Create gsoap plot
+gsoap_plot(layout, as.color = 'cluster', as.alpha = 'significance', which.label = 1:5)
 ```
 
 ## References

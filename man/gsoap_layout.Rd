@@ -32,7 +32,7 @@ Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scal
 
 \item{scale.factor}{a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.}
 
-\item{weighted}{a boolean indicating whether to use pathway \emph{importance}
+\item{weighted}{a boolean indicating whether to use pathway \emph{significance}
 (-log10(pvalue)) as a weight when closeness and clustering are calculated.}
 
 \item{packing}{a boolean indicating whether to apply circle packing.}
@@ -77,7 +77,7 @@ the \emph{isomap} projection.}
 \value{
 \code{layout} a data frame with x and y coordinates of
     the points representing the insttances, their size (radius) derived from
-    the number of gene members; importance (-log10(p-value)), closeness,
+    the number of gene members; significance (-log10(p-value)), closeness,
     cluster membership and intracluster closeness.
 }
 \description{

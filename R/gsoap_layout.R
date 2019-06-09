@@ -214,7 +214,7 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #' @param projection a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
 #' Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),
 #' @param scale.factor a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.
-#' @param weighted a boolean indicating whether to use pathway \emph{importance}
+#' @param weighted a boolean indicating whether to use pathway \emph{significance}
 #' (-log10(pvalue)) as a weight when closeness and clustering are calculated.
 #' @param packing a boolean indicating whether to apply circle packing.
 #' @param clustering a boolean indicating whether to apply clustering.
@@ -248,7 +248,7 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #'
 #' @return \code{layout} a data frame with x and y coordinates of
 #'     the points representing the insttances, their size (radius) derived from
-#'     the number of gene members; importance (-log10(p-value)), closeness,
+#'     the number of gene members; significance (-log10(p-value)), closeness,
 #'     cluster membership and intracluster closeness.
 #'
 #' @author Tomas Tokar <tomastokar@gmail.com>
@@ -354,12 +354,12 @@ gsoap_layout = function(x,
   rownames(layout) = rownames(x)
   # Calculate number of members
   layout$size = no.members
-  # Calculate importance
-  layout$importance = -log10(x[,pvalues])
+  # Calculate significance
+  layout$significance = -log10(x[,pvalues])
   # Set weights
   weights = rep(1, nrow(layout))
   if (weighted){
-    weights = layout$importance
+    weights = layout$significance
   }
   # Calculate closeness and add to layout
   layout$closeness = calc_closeness(dist.mat, weights)
