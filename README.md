@@ -1,12 +1,13 @@
-# G
+# gsoap
 
 A package for visualisation of gene set over-representation enrichment analysis.
 
 ## Features
+<p align="justify">
+Per dafault, `gsoap_layout` will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Importance of the instance is calculated as *-log10(pvalue)* and is used as a instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
+</p>
 
-Per dafault, `gsoap_layout` will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Importance of the instance is calculated as -log10(pvalue) and is used as a instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
-
-Obtained layout is an R data.frame containing following columns:
+Obtained layout is an R data.frame that contains following columns:
   * x, y - coordinates of the circles representing pathways
   * radius - circle radius
   * size - number of pathway gene members (effect size)
@@ -15,7 +16,9 @@ Obtained layout is an R data.frame containing following columns:
   * cluster - pathway cluster
   * intracluster_closeness - pathway intra-cluster closeness
 
+<p align="justify">
 Layout can be then visualized by `gsoap_plot`, that allows user to select columns to be used as color and alpha aesthetics, as well as the indices or names of the instances which should be annotated by labels.
+</p>
 
 ## Installation
 ```S
@@ -34,7 +37,11 @@ library(gsoap)
 ```S
 data("pxgenes")
 ```
-The example dataset contains results of the over-representation analysis of 72 differentially expressed genes from [Tokar et al. 2018]. The analysis was performed using Pathway Data Integration Portal (pathDIP) [Rahmati et al., 2016]. It is an R data.frame containing following columns:
+<p align="justify">
+The example dataset contains results of the over-representation analysis of 72 differentially expressed genes from [Tokar et al. 2018]. The analysis was performed using Pathway Data Integration Portal (pathDIP) [Rahmati et al., 2016]. 
+</p>
+
+It is an R data.frame that contains following columns:
   * Source - original source of the pathway
   * Pathway - pathway name
   * p.value - statistical significance of the obtained enrichment
