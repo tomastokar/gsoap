@@ -43,20 +43,16 @@ for (i in 1:N){
   args = list('distance' = sample(DISTANCE_METHODs, 1),
               'projection' = sample(PROJECTION_METHODs, 1),
               'weighted' = sample_bool(),
-              'log10.weights' = sample_bool(),
               'packing' = sample_bool(),
-              'closeness' = sample_bool(),
               'clustering' = sample_bool(),
               'hc.method' = sample(HC_METHODS, 1),
               'cluster.stat' = sample(CLUSTER_STATS_OPTIONs, 1, prob = c(10, rep(1, 9))))
   color = ifelse(args[['clustering']],
-                 'Cluster',
-                 ifelse(args[['closeness']],
-                        'Closeness',
-                        'p.value'))
+                 'cluster',
+                 sample(c('closeness', 'importance'), 1))
   alpha = ifelse(args[['clustering']],
-                 'Intracluster_closeness',
-                 'p.value')
+                 'intracluster_closeness',
+                 'importance')
   viridis = sample(c('viridis', 'magma', 'plasma', 'inferno', 'cividis'), 1)
   args[['color']] = color
   args[['alpha']] = alpha
@@ -76,9 +72,7 @@ for (i in 1:N){
                    distance = args$distance,
                    projection = args$projection,
                    weighted = args$weighted,
-                   log10.weights = args$log10.weights,
                    packing = args$packing,
-                   closeness = args$closeness,
                    clustering = args$clustering,
                    hc.method = args$hc.method,
                    cluster.stat = args$cluster.stat)

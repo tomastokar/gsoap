@@ -1,7 +1,7 @@
 data("pxgenes")
 
 OUTPUTS = c('layout', 'stress', 'spcorr')
-COLNAMES = c("x", "y", "radius", "size", "Weight", "Closeness", "Cluster", "Intracluster_closeness")
+COLNAMES = c("x", "y", "radius", "size", "importance", 'closeness', "cluster", "intracluster_closeness")
 
 test_that("Layout under default parametrization", {
   l = gsoap_layout(pxgenes, 'Members', 'p.value')
@@ -12,6 +12,6 @@ test_that("Layout under default parametrization", {
 
 test_that("Plot layout", {
   l = gsoap_layout(pxgenes, 'Members', 'p.value')
-  p = gsoap_plot(l, as.color = 'Cluster', as.alpha = 'Centrality')
+  p = gsoap_plot(l, as.color = 'cluster', as.alpha = 'closeness')
   expect_equal(class(p), c('gg', 'ggplot'))
 })

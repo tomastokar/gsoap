@@ -38,13 +38,13 @@ Obtained layout is datta.frame containing following columns:
   * y - y-coordinate of the circle representing given pathway
   * radius - circle radius
   * size - number of pathway gene members (effect size)
-  * Weight - pathway weight
-  * Closeness - pathway closeness
-  * Cluster - pathway cluster
-  * Intracluster_closeness - pathway intra-cluster closeness
+  * importance - pathway importance defined as -log10(p.value)
+  * closeness - pathway closeness
+  * cluster - pathway cluster
+  * intracluster_closeness - pathway intra-cluster closeness
 
 ### Create GSOAP plot
 ```S
-gsoap_plot(l, as.color = 'Cluster', as.alpha = 'Centrality')
+gsoap_plot(layout, as.color = 'cluster', as.alpha = 'importance')
 ```
 

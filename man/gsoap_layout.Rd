@@ -5,12 +5,11 @@
 \title{A function to create a layout for GSOAP plot}
 \usage{
 gsoap_layout(x, genes, pvalues, splitter = "/", distance = "jaccard",
-  projection = "iso", scale.factor = 1, weighted = TRUE,
-  log10.weights = TRUE, packing = TRUE, closeness = TRUE,
-  clustering = TRUE, hc.method = "ward.D", isomap.k = 3,
-  tsne.perplexity = 30, tsne.iterations = 1000, cca.epochs = 10,
-  cca.alpha0 = 0.5, no.clusters = NULL, max.clusters = 8,
-  cluster.stat = "meta")
+  projection = "iso", scale.factor = 0.8, weighted = TRUE,
+  packing = TRUE, clustering = TRUE, hc.method = "ward.D",
+  isomap.k = 3, tsne.perplexity = 30, tsne.iterations = 1000,
+  cca.epochs = 10, cca.alpha0 = 0.5, no.clusters = NULL,
+  max.clusters = 8, cluster.stat = "meta")
 }
 \arguments{
 \item{x}{a data frame with the results of gene set over-representation analysis.
@@ -33,15 +32,9 @@ Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scal
 
 \item{scale.factor}{a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.}
 
-\item{weighted}{a boolean indicating whether to apply weights
-(weight = \emph{1 / p-value}) when centrality and clustering are calculated.}
-
-\item{log10.weights}{a boolean indicating whether weights should undergo
-additional log10 tranformation}
+\item{weighted}{a boolean indicating whether to use weights when centrality and clustering are calculated.}
 
 \item{packing}{a boolean indicating whether to apply circle packing.}
-
-\item{closeness}{a boolean indicating whether to calculate closeness.}
 
 \item{clustering}{a boolean indicating whether to apply clustering.}
 
@@ -78,19 +71,14 @@ Options are:
     \item \emph{HC} (Hubert’s C coefficient)
 }}
 
-\item{pam.boots}{a positive integer indicating number of boostraps used to be used when selecting number of clusters.}
+\item{log10.weights}{a boolean indicating whether weights should undergo
+additional log10 tranformation}
 }
 \value{
-A \code{gsoap} object that is a list comprising following components
-\itemize{
-    \item \code{layout} data frame with x and y coordinates of
+\code{layout} a data frame with x and y coordinates of
     the points representing the insttances, their size (radius) derived from
-    the number of gene members; weight (-log10(p-value)), centrality
-    and cluster membership.
-    \item \code{stress} Kruskall stress caused by projection and circle packing.
-    \item \code{spcorr} Spearman correlation between the original distances/dissimilarities
-    between gene sets and those obtained after projection and circle packing.
-}
+    the number of gene members; importance (-log10(p-value)), closeness,
+    cluster membership and intracluster closeness.
 }
 \description{
 Some description

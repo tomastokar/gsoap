@@ -94,7 +94,7 @@ More description
 data(pxgenes)
 
 l = gsoap_layout(pxgenes, 'Members', 'p.value')
-gsoap_plot(l$layout, as.color = 'Cluster', as.alpha = 'Centrality')
+gsoap_plot(l, as.color = 'cluster', as.alpha = 'closeness')
 
 }
 \author{

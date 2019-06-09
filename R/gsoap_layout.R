@@ -214,12 +214,10 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #' @param projection a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
 #' Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),
 #' @param scale.factor a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.
-#' @param weighted a boolean indicating whether to apply weights
-#' (weight = \emph{1 / p-value}) when centrality and clustering are calculated.
+#' @param weighted a boolean indicating whether to use weights when centrality and clustering are calculated.
 #' @param log10.weights a boolean indicating whether weights should undergo
 #' additional log10 tranformation
 #' @param packing a boolean indicating whether to apply circle packing.
-#' @param closeness a boolean indicating whether to calculate closeness.
 #' @param isomap.k an integer indicating number of k nearest neighbors of
 #' the \emph{isomap} projection.
 #' @param tsne.perplexity an integer indicating \emph{tSNE} perplexity.
@@ -246,18 +244,11 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #'     \item \emph{R2sq} (R-squared using squared distances)
 #'     \item \emph{HC} (Hubert’s C coefficient)
 #' }
-#' @param pam.boots a positive integer indicating number of boostraps used to be used when selecting number of clusters.
 #'
-#' @return A \code{gsoap} object that is a list comprising following components
-#' \itemize{
-#'     \item \code{layout} data frame with x and y coordinates of
+#' @return \code{layout} a data frame with x and y coordinates of
 #'     the points representing the insttances, their size (radius) derived from
-#'     the number of gene members; weight (-log10(p-value)), centrality
-#'     and cluster membership.
-#'     \item \code{stress} Kruskall stress caused by projection and circle packing.
-#'     \item \code{spcorr} Spearman correlation between the original distances/dissimilarities
-#'     between gene sets and those obtained after projection and circle packing.
-#' }
+#'     the number of gene members; importance (-log10(p-value)), closeness,
+#'     cluster membership and intracluster closeness.
 #'
 #' @author Tomas Tokar <tomastokar@gmail.com>
 #'
@@ -273,11 +264,9 @@ gsoap_layout = function(x,
                         splitter = '/',
                         distance = 'jaccard',
                         projection = 'iso',
-                        scale.factor = 1.0,
+                        scale.factor = 0.8,
                         weighted = TRUE,
-                        log10.weights = TRUE,
                         packing = TRUE,
-                        closeness = TRUE,
                         clustering = TRUE,
                         hc.method = 'ward.D',
                         isomap.k = 3,
@@ -321,16 +310,15 @@ gsoap_layout = function(x,
   no.members = rowSums(asc.mat)
   # Calculate distance matrix
   dist.mat = calc_distance_matrix(asc.mat, distance.method = distance)
+  # --------------------------
+  # Do projection to 2d space
+  # --------------------------
   # Check for zeros appart of the main diagonal
   if (any(rowSums(dist.mat == 0.) > 1)){
     warning("Zero dissimilarity between non-identical entries.")
     k = ncol(asc.mat)
     dist.mat = resolve.nondiag.zeros(dist.mat, k)
   }
-
-  # --------------------------
-  # Do projection to 2d space
-  # --------------------------
   if (projection == 'iso'){
     proj = suppressMessages(isomap_transformation(dist.mat,
                                                   isomap.k = isomap.k))
@@ -365,6 +353,15 @@ gsoap_layout = function(x,
   rownames(layout) = rownames(x)
   # Calculate number of members
   layout$size = no.members
+  # Calculate importance
+  layout$importance = -log10(x[,pvalues])
+  # Set weights
+  weights = rep(1, nrow(layout))
+  if (weighted){
+    weights = layout$importance
+  }
+  # Calculate closeness and add to layout
+  layout$closeness = calc_closeness(dist.mat, weights)
 
   # ---------------------
   # Calculate distortion
@@ -381,36 +378,22 @@ gsoap_layout = function(x,
   # -----------------------
   # Extended functionality
   # -----------------------
-  # Add p-values to layout
-  # Set weights
-  if (weighted){
-    layout$Weight = 1. / x[,pvalues]
-    if (log10.weights){
-      layout$Weight = log10(layout$Weight)
-    }
-  } else {
-    layout$Weight = rep(1, nrow(layout))
-  }
-  # Calculate centrality and add to layout
-  if (closeness){
-    layout$Closeness = calc_closeness(dist.mat, layout$Weight)
-  }
   # Do clustering
   if (clustering){
     # Clustering
-    layout$Cluster = hkclustering(dist.mat,
-                                  layout$Weight,
+    layout$cluster = hkclustering(dist.mat,
+                                  weights,
                                   no.clusters = no.clusters,
                                   max.clusters = max.clusters,
                                   hc.method = hc.method,
                                   cluster.stat = cluster.stat)
     # Calculate intracluster weights
-    layout$Intracluster_closeness = intracluster_closeness(layout$Cluster,
+    layout$intracluster_closeness = intracluster_closeness(layout$cluster,
                                                            dist.mat,
-                                                           layout$Weight)
+                                                           weights)
     # Add cluster names
-    layout$Cluster = annotate_clusters(layout$Cluster,
-                                       layout$Intracluster_closeness,
+    layout$cluster = annotate_clusters(layout$cluster,
+                                       layout$intracluster_closeness,
                                        rownames(layout))
   }
   # Return
