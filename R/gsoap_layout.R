@@ -227,9 +227,9 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #' Options are:
 #' \itemize{
 #'     \item \emph{meta} (default) is a combination of the methods listed below
-#'     \item \emph{PBC} (point biserial correlation; default)
-#'     \item \emph{HG} (Hubert's samma)
-#'     \item \emph{HGSD} (Hubert’s samma - Somer's D)
+#'     \item \emph{PBC} (point biserial correlation)
+#'     \item \emph{HG} (Hubert's gamma)
+#'     \item \emph{HGSD} (Hubert’s gamma - Somer's D)
 #'     \item \emph{ASW} (average silhouette width)
 #'     \item \emph{ASWw} (Average weighted silhouette width)
 #'     \item \emph{CH} (Calinski-Harabasz index)
