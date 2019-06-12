@@ -143,29 +143,6 @@ calc_closeness = function(dm, w){
   return(closeness)
 }
 
-
-intracluster_closeness = function(cl, dm, w){
-  icc = rep(1, length(cl))
-  for (i in unique(cl)){
-    idx = which(cl == i)
-    icc[idx] = calc_closeness(dm[idx, idx], w[idx])
-  }
-  return(icc)
-}
-
-
-annotate_clusters = function(cl, icc, names){
-  cn = names
-  for (i in unique(cl)){
-    idx = which(cl == i)
-    n = names[idx]
-    x = icc[idx]
-    cn[idx] = n[which.max(x)]
-  }
-  return(cn)
-}
-
-
 select_clustering = function(cls, dm, w, stat = 'meta'){
   cq = lapply(cls, function(cl)WeightedCluster::wcClusterQuality(dm, cl, weights = w)$stats)
   cq = data.frame(do.call(rbind, cq))
@@ -248,8 +225,8 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #'
 #' @return \code{layout} a data frame with x and y coordinates of
 #'     the points representing the insttances, their size (radius) derived from
-#'     the number of gene members; significance (-log10(p-value)), closeness,
-#'     cluster membership and intracluster closeness.
+#'     the number of gene members; significance (-log10(p-value)), closeness and
+#'     cluster membership.
 #'
 #' @author Tomas Tokar <tomastokar@gmail.com>
 #'
@@ -388,14 +365,8 @@ gsoap_layout = function(x,
                                   max.clusters = max.clusters,
                                   hc.method = hc.method,
                                   cluster.stat = cluster.stat)
-    # Calculate intracluster weights
-    layout$intracluster_closeness = intracluster_closeness(layout$cluster,
-                                                           dist.mat,
-                                                           weights)
-    # Add cluster names
-    layout$cluster = annotate_clusters(layout$cluster,
-                                       layout$intracluster_closeness,
-                                       rownames(layout))
+
+    layout$cluster = paste('Cluster', layout$cluster)
   }
   # Return
   return(layout)

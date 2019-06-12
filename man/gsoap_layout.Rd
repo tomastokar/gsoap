@@ -77,8 +77,8 @@ the \emph{isomap} projection.}
 \value{
 \code{layout} a data frame with x and y coordinates of
     the points representing the insttances, their size (radius) derived from
-    the number of gene members; significance (-log10(p-value)), closeness,
-    cluster membership and intracluster closeness.
+    the number of gene members; significance (-log10(p-value)), closeness and
+    cluster membership.
 }
 \description{
 Some description

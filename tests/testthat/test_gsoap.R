@@ -1,7 +1,7 @@
 data("pxgenes")
 
 OUTPUTS = c('layout', 'stress', 'spcorr')
-COLNAMES = c("x", "y", "radius", "size", "significance", 'closeness', "cluster", "intracluster_closeness")
+COLNAMES = c("x", "y", "radius", "size", "significance", 'closeness', "cluster")
 
 test_that("Layout under default parametrization", {
   l = gsoap_layout(pxgenes, 'Members', 'p.value')
