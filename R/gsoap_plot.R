@@ -63,7 +63,7 @@ geom_radius_legend = function(radius, x, y, no=4, font.size = 10, labeller) {
 #'
 #' More description
 #'
-#' @param layout a data frame, a layout extracted from the gsoap object obtained from the \code{\link{create_gsoap_layout}}.
+#' @param layout a data frame, a layout created by \code{\link{gsoap_layout}}.
 #' @param as.color a character or integer, indicating name or index of the column with color aesthetic.
 #' @param as.alpha a character or integer, indicating name or index of the column with alpha aesthetic.
 #' @param which.labels a character or integer vector, indicating gene sets (rows)

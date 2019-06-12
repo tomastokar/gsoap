@@ -19,7 +19,7 @@ gsoap_plot(layout, as.color = NULL, as.alpha = NULL,
   ylimits = c(-0.1, 1.1), void = FALSE)
 }
 \arguments{
-\item{layout}{a data frame, a layout extracted from the gsoap object obtained from the \code{\link{create_gsoap_layout}}.}
+\item{layout}{a data frame, a layout created by \code{\link{gsoap_layout}}.}
 
 \item{as.color}{a character or integer, indicating name or index of the column with color aesthetic.}
 

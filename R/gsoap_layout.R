@@ -189,7 +189,7 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #' Options include (but are not limited to) \emph{jaccard} (default), \emph{manhattan}, \emph{dice},
 #' \emph{pearson}. For more details see \code{\link[philentropy]{distance}}.
 #' @param projection a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
-#' Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),
+#' Options include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),
 #' @param scale.factor a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.
 #' @param weighted a boolean indicating whether to use pathway \emph{significance}
 #' (-log10(pvalue)) as a weight when closeness and clustering are calculated.
@@ -224,7 +224,7 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #' @param cca.alpha0 a positive real number indicating \emph{CCA} initial step size.
 #'
 #' @return \code{layout} a data frame with x and y coordinates of
-#'     the points representing the insttances, their size (radius) derived from
+#'     the points representing the instances, their size (radius) derived from
 #'     the number of gene members; significance (-log10(p-value)), closeness and
 #'     cluster membership.
 #'

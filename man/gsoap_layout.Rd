@@ -28,7 +28,7 @@ Options include (but are not limited to) \emph{jaccard} (default), \emph{manhatt
 \emph{pearson}. For more details see \code{\link[philentropy]{distance}}.}
 
 \item{projection}{a character indicating method used to project instances into 2-dimensional space based on their distance/dissimilarity..
-Ooptions include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),}
+Options include \emph{iso} (isomap; default), \emph{mds} (multidimensional scaling), \emph{cca} (curvilinear component analysis), \emph{tsne} (t-distributed stochastic neighbor embedding),}
 
 \item{scale.factor}{a positive real number to control dependence of the circle radius on the number of query gene members of the given gene set.}
 
@@ -76,7 +76,7 @@ the \emph{isomap} projection.}
 }
 \value{
 \code{layout} a data frame with x and y coordinates of
-    the points representing the insttances, their size (radius) derived from
+    the points representing the instances, their size (radius) derived from
     the number of gene members; significance (-log10(p-value)), closeness and
     cluster membership.
 }
