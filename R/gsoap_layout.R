@@ -173,9 +173,14 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 
 #' A function to create a layout for GSOAP plot
 #'
-#' Some description
+#' A function evaluates the overlaps among instance
+#' (e.g. pathways, or GO terms) query gene members
+#' by binary distance measure and applies the projection
+#' to map the instances into 2-dimensional space.
+#' Obtained coordinates are then adjusted by cicrle packing.
+#' Additional characteristics of the instances - closeness (centrality)
+#' and clustering are calculed.
 #'
-#' More description
 #'
 #' @param x a data frame with the results of gene set over-representation analysis.
 #' Must have a rownames indicating names of the genes sets and at least two columns,

@@ -1,6 +1,9 @@
 library(gsoap)
 library(ggpubr)
 
+projections = c('iso', 'mds', 'cca', 'tsne')
+aesthetics = c('significance', 'closeness', 'cluster', 'ANGPT1')
+
 # # Load example data
 # data("pxgenes")
 #
@@ -11,7 +14,6 @@ library(ggpubr)
 # # -----------------
 # # Generate layouts
 # # -----------------
-# projections = c('iso', 'mds', 'cca', 'tsne')
 # layouts = list()
 # for (projection in projections){
 #   layouts[[projection]] = gsoap_layout(pxgenes,
@@ -71,7 +73,6 @@ g = function(p, a1, a2, L = 3){
              label.alpha = 1.)
 }
 
-aesthetics = c('significance', 'closeness', 'cluster', 'ANGPT1')
 plots = list()
 for (aesthetic in aesthetics){
   if (aesthetic %in% c('cluster', 'ANGPT1')){
@@ -86,13 +87,19 @@ for (aesthetic in aesthetics){
 # Arrange plots
 # --------------
 n = length(projections)
+m = length(aesthetics)
 arranged = list()
-for (aesthetic in aesthetics){
+labels = list(c(c('A', 'B')))
+for (i in 1:m){
+  idx = (i - 1) * 4 + 1
+  labels = toupper(letters[c(idx:(idx+4))])
+  aesthetic = aesthetics[i]
   arranged[[aesthetic]] = ggarrange(plotlist = plots[[aesthetic]],
                                     ncol = n,
                                     nrow = 1,
                                     common.legend = TRUE,
-                                    legend = 'top')
+                                    legend = 'top',
+                                    labels = labels)
 }
 
 final_plot = ggarrange(plotlist = arranged,
@@ -100,6 +107,23 @@ final_plot = ggarrange(plotlist = arranged,
                        ncol = 1,
                        align = 'hv')
 
-pdf('./img/paper_plot.pdf', width = 15, height = 16)
+pdf('./img/paper_plot_w_labels.pdf', width = 15, height = 16)
 plot(final_plot)
 dev.off()
+
+
+png('./img/paper_plot_w_labels.png', width = 15, height = 16, units = 'in', res = 900)
+plot(final_plot)
+dev.off()
+
+# setEPS()
+# postscript('./img/paper_plot_w_labels_new.eps', width = 15, height = 15)
+# plot(final_plot)
+# dev.off()
+
+ggsave('./img/paper_plot_w_labels_new.eps',
+       plot = final_plot,
+       device = cairo_ps,
+       width = 15,
+       height = 15,
+       units = 'in')

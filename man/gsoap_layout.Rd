@@ -81,10 +81,13 @@ the \emph{isomap} projection.}
     cluster membership.
 }
 \description{
-Some description
-}
-\details{
-More description
+A function evaluates the overlaps among instance
+(e.g. pathways, or GO terms) query gene members
+by binary distance measure and applies the projection
+to map the instances into 2-dimensional space.
+Obtained coordinates are then adjusted by cicrle packing.
+Additional characteristics of the instances - closeness (centrality)
+and clustering are calculed.
 }
 \examples{
 data(pxgenes)

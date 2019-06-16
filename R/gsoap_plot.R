@@ -59,9 +59,10 @@ geom_radius_legend = function(radius, x, y, no=4, font.size = 10, labeller) {
 
 #' A function to create Gene Set Overrepresentation Analysis Plot
 #'
-#' Some description
+#' A function to plot layout obtained from the \code{\link{gsoap_layout}},
+#' while using color and alpha to highlight any of the obtained instance
+#' characteristics.
 #'
-#' More description
 #'
 #' @param layout a data frame, a layout created by \code{\link{gsoap_layout}}.
 #' @param as.color a character or integer, indicating name or index of the column with color aesthetic.

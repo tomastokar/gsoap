@@ -85,10 +85,9 @@ whose size reflects the number of query gene members of the given set,
 and whose mutual proximities reflect the number common gene members.
 }
 \description{
-Some description
-}
-\details{
-More description
+A function to plot layout obtained from the \code{\link{gsoap_layout}},
+while using color and alpha to highlight any of the obtained instance
+characteristics.
 }
 \examples{
 data(pxgenes)
