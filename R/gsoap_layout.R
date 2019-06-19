@@ -240,14 +240,15 @@ hkclustering = function(dm, w, no.clusters = NULL, max.clusters = 5, hc.method =
 #'
 #' l = gsoap_layout(pxgenes, 'Members', 'p.value')
 #'
-#' head(l$layout)
+#' head(l)
+#'
 gsoap_layout = function(x,
                         genes,
                         pvalues,
                         splitter = '/',
                         distance = 'jaccard',
                         projection = 'iso',
-                        scale.factor = 0.8,
+                        scale.factor = 1.0,
                         weighted = TRUE,
                         packing = TRUE,
                         clustering = TRUE,
@@ -281,6 +282,9 @@ gsoap_layout = function(x,
   if (!any(grepl(splitter, x[,genes]))){
     warning('Either `genes`, or `splitter` seem to be not correct.')
   }
+  if (any(is.na(x[c(genes, pvalues)]))){
+    stop('Input contains NA values.')
+  }
 
   # --------------
   # Create layout
@@ -293,6 +297,7 @@ gsoap_layout = function(x,
   no.members = rowSums(asc.mat)
   # Calculate distance matrix
   dist.mat = calc_distance_matrix(asc.mat, distance.method = distance)
+
   # --------------------------
   # Do projection to 2d space
   # --------------------------

@@ -5,7 +5,7 @@
 \title{A function to create a layout for GSOAP plot}
 \usage{
 gsoap_layout(x, genes, pvalues, splitter = "/", distance = "jaccard",
-  projection = "iso", scale.factor = 0.8, weighted = TRUE,
+  projection = "iso", scale.factor = 1, weighted = TRUE,
   packing = TRUE, clustering = TRUE, hc.method = "ward.D",
   no.clusters = NULL, max.clusters = 8, cluster.stat = "meta",
   isomap.k = 3, tsne.perplexity = 30, tsne.iterations = 1000,
@@ -94,7 +94,8 @@ data(pxgenes)
 
 l = gsoap_layout(pxgenes, 'Members', 'p.value')
 
-head(l$layout)
+head(l)
+
 }
 \author{
 Tomas Tokar <tomastokar@gmail.com>

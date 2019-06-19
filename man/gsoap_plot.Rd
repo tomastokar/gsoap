@@ -13,7 +13,7 @@ gsoap_plot(layout, as.color = NULL, as.alpha = NULL,
   viridis.range = c(0, 1), label.alpha = 0.6, segment.alpha = 0.5,
   repel.xynudges = c(0.1, 0.1), repel.hvjust = c(0, 0),
   repel.direction = "both", base.fontsize = 8,
-  size.guide.fontsize = base.fontsize - 2,
+  size.guide.fontsize = base.fontsize - 1,
   label.fontsize = base.fontsize - 1, title = NULL, subtitle = NULL,
   xlabel = "proj. 1", ylabel = "proj. 2", xlimits = c(-0.1, 1.1),
   ylimits = c(-0.1, 1.1), void = FALSE)
