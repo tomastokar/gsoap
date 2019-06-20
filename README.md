@@ -49,6 +49,10 @@ It is an R data.frame, whose rownames are pathway names and columns are:
   
 ### Create GSOAP layout
 ```S
+# Reduce to top 100 instances
+pxgenes = head(pxgenes[order(pxgenes$FDR),], 100)
+
+# Create layout
 layout = gsoap_layout(pxgenes, 'Members', 'p.value')
 ```
 
@@ -61,7 +65,7 @@ layout = layout[order(layout$significance, decreasing = TRUE),]
 gsoap_plot(layout, as.color = 'cluster', as.alpha = 'significance', which.label = 1:5)
 ```
 
-![gsoap_example](https://user-images.githubusercontent.com/46754141/59162870-67bb5a00-8ac6-11e9-95b0-25e60fc3b97b.png)
+![gsoap_example](https://user-images.githubusercontent.com/46754141/59848847-292e6680-9334-11e9-884e-1b5180fb9aa9.png)
 
 ## References
  * Tokar, Tomas, et al. "Differentially expressed microRNAs in lung adenocarcinoma invert effects of copy number aberrations of prognostic genes." Oncotarget 9.10 (2018): 9137.

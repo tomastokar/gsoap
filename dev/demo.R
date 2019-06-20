@@ -4,6 +4,9 @@ library(gsoap)
 # Load example dataset
 data(pxgenes)
 
+# Reduce to top 100 instances
+pxgenes = head(pxgenes[order(pxgenes$FDR),], 100)
+
 # Create GSOAP layout
 layout = gsoap_layout(pxgenes, 'Members', 'p.value')
 
