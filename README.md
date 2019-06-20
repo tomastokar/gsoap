@@ -4,17 +4,16 @@ A package for visualisation of gene set over-representation enrichment analysis.
 
 ## Features
 <p align="justify">
-Per dafault, <code>gsoap_layout</code> will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Significance of the instance is calculated as *-log10(pvalue)* and is used as a instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
+Per dafault, <code>gsoap_layout</code> will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Significance of the instance is calculated as *-log10(pvalue)* and is used as instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
 </p>
 
-Obtained layout is an R data.frame that contains following columns:
+Obtained layout is an R data.frame that contains the following columns:
   * x, y - coordinates of the circles representing pathways
   * radius - circle radius
   * size - number of pathway gene members (effect size)
   * significance - pathway significance defined as -log10(p.value)
   * closeness - pathway closeness
-  * cluster - pathway cluster
-  * intracluster_closeness - pathway intra-cluster closeness
+  * cluster - pathway cluster membership
 
 <p align="justify">
 Layout can be then visualized by <code>gsoap_plot</code>, that allows user to select columns to be used as color and alpha aesthetics, as well as the indices or names of the instances which should be annotated by labels.

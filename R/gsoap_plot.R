@@ -84,7 +84,7 @@ geom_radius_legend = function(radius, x, y, no=4, font.size = 10, labeller) {
 #' @param segment.alpha  a value between 0 and 1 indicating alpha of the labels repels.
 #' @param repel.xynudges a numeric vector of length 2 with horizontal and vertical adjustments to nudge the position of labels.
 #' @param repel.hvjust a numeric vector of length 2 with horizontal and vertical justification of labels.
-#' @param repel.direction a character indicating direction in which to adjust position of labels, options are \emph{both} (default), \emph{x} and \emph{y}.
+#' @param repel.direction a character indicating direction to adjust position of labels, options are \emph{both} (default), \emph{x} and \emph{y}.
 #' @param base.fontsize an integer indicating base font size.
 #' @param size.guide.fontsize an integer indicating size guide font size.
 #' @param label.fontsize an integer indicating labels font size.
@@ -98,7 +98,7 @@ geom_radius_legend = function(radius, x, y, no=4, font.size = 10, labeller) {
 #'
 #' @return A gsoap plot, where individual gene sets are represented by circles,
 #' whose size reflects the number of query gene members of the given set,
-#' and whose mutual proximities reflect the number common gene members.
+#' and whose mutual proximities reflect the number of common gene members.
 #'
 #' @author Tomas Tokar <tomastokar@gmail.com>
 #'

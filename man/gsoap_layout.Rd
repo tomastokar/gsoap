@@ -13,7 +13,7 @@ gsoap_layout(x, genes, pvalues, splitter = "/", distance = "jaccard",
 }
 \arguments{
 \item{x}{a data frame with the results of gene set over-representation analysis.
-Must have a rownames indicating names of the genes sets and at least two columns,
+Must have rownames indicating names of the genes sets and at least two columns,
 one of which contains query gene members; and another one that contains respective
 p-values (raw or adjusted for multiple testing).}
 
@@ -85,9 +85,9 @@ A function evaluates the overlaps among instance
 (e.g. pathways, or GO terms) query gene members
 by binary distance measure and applies the projection
 to map the instances into 2-dimensional space.
-Obtained coordinates are then adjusted by cicrle packing.
+Obtained coordinates are then adjusted by circle packing.
 Additional characteristics of the instances - closeness (centrality)
-and clustering are calculed.
+and clustering - are calculated.
 }
 \examples{
 data(pxgenes)

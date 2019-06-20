@@ -2,9 +2,9 @@
 #'
 #' The data contains results of the pathway over-representation enrichment
 #' analysis of the paradoxical genes obtained from pathDIP (Rahmati et al, 2016).
-#' These genes were found deregulated in adenocarcinoma of the lung, and were termed
+#' These genes were found deregulated in lung adenocarcinoma (LUAD), and were termed
 #' paradoxical because their copy number aberrations are in contrast to
-#' their differetial expression status (Tokar et al., 2018).
+#' their differential expression status (Tokar et al., 2018).
 #'
 #' @docType data
 #'

@@ -57,7 +57,7 @@ options include \emph{viridis} (default), \emph{magma}, \emph{plasma}, \emph{inf
 
 \item{repel.hvjust}{a numeric vector of length 2 with horizontal and vertical justification of labels.}
 
-\item{repel.direction}{a character indicating direction in which to adjust position of labels, options are \emph{both} (default), \emph{x} and \emph{y}.}
+\item{repel.direction}{a character indicating direction to adjust position of labels, options are \emph{both} (default), \emph{x} and \emph{y}.}
 
 \item{base.fontsize}{an integer indicating base font size.}
 
@@ -82,7 +82,7 @@ options include \emph{viridis} (default), \emph{magma}, \emph{plasma}, \emph{inf
 \value{
 A gsoap plot, where individual gene sets are represented by circles,
 whose size reflects the number of query gene members of the given set,
-and whose mutual proximities reflect the number common gene members.
+and whose mutual proximities reflect the number of common gene members.
 }
 \description{
 A function to plot layout obtained from the \code{\link{gsoap_layout}},
