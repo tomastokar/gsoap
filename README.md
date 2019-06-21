@@ -67,6 +67,51 @@ gsoap_plot(layout, as.color = 'cluster', as.alpha = 'significance', which.label 
 
 ![gsoap_example](https://user-images.githubusercontent.com/46754141/59848847-292e6680-9334-11e9-884e-1b5180fb9aa9.png)
 
+```S
+library(clusterProfiler)
+library(org.Hs.eg.db)
+
+data(geneList)
+
+gene = names(geneList)[abs(geneList) > 2.0]
+
+x = enrichGO(gene = gene,
+             ont  = "BP",
+             OrgDb = org.Hs.eg.db,
+             pvalueCutoff = 0.01,
+             pAdjustMethod = "fdr",
+             universe = names(geneList),
+             minGSSize = 5,
+             maxGSSize = 500,
+             qvalueCutoff = 0.01,
+             readable = FALSE)
+
+x = as.data.frame(x, row.names = x$Description)
+
+
+l = gsoap_layout(x,
+                 genes = 'geneID',
+                 pvalues = 'p.adjust',
+                 projection = 'tsne',
+                 scale.factor = 0.8,
+                 no.clusters = 5)
+
+idx = which(l$cluster == 'Cluster 1')
+
+p = gsoap_plot(l,
+               as.alpha = 'significance',
+               as.color = 'cluster',
+               which.labels = idx,
+               viridis.option = 'plasma',
+               viridis.direction = 1,
+               viridis.range = c(.2, .8),
+               size.guide.loc = c(1., 1.),
+               label.fontsize = 10)
+```
+
+![gsoap_example_cluster_profiler](https://user-images.githubusercontent.com/46754141/59890165-a93ce680-939d-11e9-9d91-d244453c3e1f.png)
+
+
 ## References
  * Tokar, Tomas, et al. "Differentially expressed microRNAs in lung adenocarcinoma invert effects of copy number aberrations of prognostic genes." Oncotarget 9.10 (2018): 9137.
  * Rahmati, Sara, et al. "pathDIP: an annotated resource for known and predicted human gene-pathway associations and pathway enrichment analysis." Nucleic acids research 45.D1 (2016): D419-D426.
