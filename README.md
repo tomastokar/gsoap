@@ -4,7 +4,7 @@ A package for visualisation of gene set over-representation enrichment analysis.
 
 ## Features
 <p align="justify">
-Per dafault, <code>gsoap_layout</code> will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Significance of the instance is calculated as *-log10(pvalue)* and is used as instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
+Per dafault, <code>gsoap_layout</code> will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Significance of the instance is calculated as -log10(pvalue) and is used as instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
 </p>
 
 Obtained layout is an R data frame that contains the following columns:
