@@ -7,7 +7,7 @@ A package for visualisation of gene set over-representation enrichment analysis.
 Per dafault, <code>gsoap_layout</code> will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Significance of the instance is calculated as *-log10(pvalue)* and is used as instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
 </p>
 
-Obtained layout is an R data.frame that contains the following columns:
+Obtained layout is an R data frame that contains the following columns:
   * x, y - coordinates of the circles representing pathways
   * radius - circle radius
   * size - number of pathway gene members (effect size)
@@ -111,7 +111,7 @@ x = enrichGO(gene = gene,
 # Convert to data frame and set BP description as rownames
 x = as.data.frame(x, row.names = x$Description)
 ```
-Obtained data.frame contains:
+Obtained data frame contains:
   * ID - GO biol. proc. ID
   * Description - a full name of the GO biol. proc.
   * GeneRatio - a fraction of query gene members of the given GO biol. proc. to the total number of query genes. 
