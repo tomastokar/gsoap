@@ -44,7 +44,7 @@ data("pxgenes")
 It is an R data.frame, whose rownames are pathway names and columns are:
   * Source - original source of the pathway
   * Pathway - pathway name
-  * p.value - statistical significance of the obtained enrichment
+  * p.value - statistical significance of the obtained overlap
   * FDR - false discovery rate of the obtained enrichment
   * Members - list of query genes belonging to the given pathway (in the following format: ``GENE1/GENE2/..'')
   
@@ -74,7 +74,7 @@ gsoap_plot(layout, as.color = 'cluster', as.alpha = 'significance', which.label 
 
 ### Example 2 (using clusterProfiler)
 
-Here we use the package `clusterProfiler` [Yu et al., 2012] to perform GSOA on example set of genes. GSOAP is then applied on the obtained results.
+Here we use the R package *clusterProfiler* [Yu et al., 2012] to perform GSOA on example set of genes. GSOAP is then applied on the obtained results.
 
 #### Load libraries
 ```S
@@ -88,7 +88,7 @@ library(org.Hs.eg.db)
 # Import example gene list
 data(geneList)
 ```
-Object `geneList` is an example vector of gene expression fold change, whose names are gene entrez IDs, provided by clusterProfiler. For more details see clusterProfiler project ![website]('https://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html').
+Object `geneList` is an example vector of gene expression fold change, whose names are gene entrez IDs, provided by clusterProfiler. For more details see *clusterProfiler* project ![website]('https://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html').
 
 #### Perform GSOA
 Reduce the genes to a differentially expressed subset; and perform GSOA on Gene Ontology (GO) biological processes (BP)
@@ -111,6 +111,17 @@ x = enrichGO(gene = gene,
 # Convert to data frame and set BP description as rownames
 x = as.data.frame(x, row.names = x$Description)
 ```
+Obtained data.frame contains:
+  * ID - ID of GO biol. proc.
+  * Description - a full name of the GO biol. proc.
+  * GeneRatio - a fraction of query gene members of the given GO biol. proc. to the total number of query genes. 
+  * BgRatio - a fraction of total number of genes of the given GO biol. to size of the ``gene universe''.
+  * pvalue - a statistical significance of the obtained overlap
+  * p.adjust - a statistical significance adjusted for multiple testing applying user-specified adjustment method.
+  * qvalue - a statistical significance adjusted for multiple testing applying clusterProfiler custom adjustment method.
+  * geneID -  list of query gene members of the given GO biol. proc. (in the following format: ``GENE1/GENE2/..'')
+  * Count - total number of query gene members of the given GO biol. proc. (effect size).
+
 #### Create GSOAP layout and plot
 Create GSOAP layout using tSNE projection; decreate the scale factor to better accomodate the instances into the layout space. 
 ```
