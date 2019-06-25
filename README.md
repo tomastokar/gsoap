@@ -26,13 +26,14 @@ install_github("tomastokar/gsoap", dependencies=T)
 ```
 
 ## Usage
+### Example 1 (using example dataset)
 
-### Load GSOAP package
+#### Load GSOAP package
 ```S
 library(gsoap)
 ```
 
-### Load example dataset 
+#### Load example dataset 
 ```S
 data("pxgenes")
 ```
@@ -47,16 +48,20 @@ It is an R data.frame, whose rownames are pathway names and columns are:
   * FDR - false discovery rate of the obtained enrichment
   * Members - list of query genes belonging to the given pathway (in the following format: ``GENE1/GENE2/..'')
   
-### Create GSOAP layout
+#### Create GSOAP layout
+Before creating the GSOAP layout, reduce the number of examples to 100. GSOAP works best with datasets containing up to 100 instances (rows). For bigger datasets, value of 'scale.factor' should be decreased.
+
 ```S
 # Reduce to top 100 instances
 pxgenes = head(pxgenes[order(pxgenes$FDR),], 100)
 
-# Create layout
+# Create layout using default parametrization
 layout = gsoap_layout(pxgenes, 'Members', 'p.value')
 ```
 
-### Create GSOAP plot
+#### Create GSOAP plot
+Create GSOAP plot, using color to highlight the cluster membership and opacity to highlight significance. In addition, add labels of the 
+5 most significant instances.
 ```S
 # Order instances by their significance
 layout = layout[order(layout$significance, decreasing = TRUE),]
@@ -67,14 +72,29 @@ gsoap_plot(layout, as.color = 'cluster', as.alpha = 'significance', which.label 
 
 ![gsoap_example](https://user-images.githubusercontent.com/46754141/59848847-292e6680-9334-11e9-884e-1b5180fb9aa9.png)
 
+### Example 2 (using clusterProfiler)
+
+#### Load libraries
 ```S
+# Load clusterProfiler and annotation database
 library(clusterProfiler)
 library(org.Hs.eg.db)
+```
 
+#### Example example gene vector.
+```
+# Import example gene list
 data(geneList)
+```
+Object 'geneList' is an example vector of gene expression fold change, whose names are gene entrez IDs, provided by clusterProfiler. For more details see clusterProfiler project [website]('https://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html').
 
+#### Perform GSOA
+Reduce the genes to a differentially expressed subset; and perform GSOA on Gene Ontology (GO) biological processes (BP)
+```
+# Reducte to differentially expressed genes
 gene = names(geneList)[abs(geneList) > 2.0]
 
+# Run enrichGO
 x = enrichGO(gene = gene,
              ont  = "BP",
              OrgDb = org.Hs.eg.db,
@@ -87,17 +107,23 @@ x = enrichGO(gene = gene,
              readable = FALSE)
 
 x = as.data.frame(x, row.names = x$Description)
-
-
+```
+#### Create GSOAP layout and plot
+Create GSOAP layout using tSNE projection; decreate the scale factor to better accomodate the instances into layout space. 
+```
 l = gsoap_layout(x,
                  genes = 'geneID',
                  pvalues = 'p.adjust',
                  projection = 'tsne',
                  scale.factor = 0.8,
                  no.clusters = 5)
-
+```
+Take indices of all instances of the first cluster.
+```
 idx = which(l$cluster == 'Cluster 1')
-
+```
+Plot GSOAP, whiile using color to highlight the cluster membership and opacity to highlight significance. In addition, add labels of instances from the first cluster.
+```
 p = gsoap_plot(l,
                as.alpha = 'significance',
                as.color = 'cluster',
