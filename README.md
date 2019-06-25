@@ -26,7 +26,11 @@ install_github("tomastokar/gsoap", dependencies=T)
 ```
 
 ## Usage
-### Example 1 (using example dataset)
+### Example 1
+
+<p align="justify">
+Here We use example dataset provided by GSOAP. The example dataset contains results of the over-representation analysis of 72 differentially expressed genes from [Tokar et al. 2018]. The analysis was performed using Pathway Data Integration Portal (pathDIP) [Rahmati et al., 2016]. 
+</p>
 
 #### Load GSOAP package
 ```S
@@ -37,10 +41,6 @@ library(gsoap)
 ```S
 data("pxgenes")
 ```
-<p align="justify">
-The example dataset contains results of the over-representation analysis of 72 differentially expressed genes from [Tokar et al. 2018]. The analysis was performed using Pathway Data Integration Portal (pathDIP) [Rahmati et al., 2016]. 
-</p>
-
 It is an R data.frame, whose rownames are pathway names and columns are:
   * Source - original source of the pathway
   * Pathway - pathway name
@@ -74,6 +74,8 @@ gsoap_plot(layout, as.color = 'cluster', as.alpha = 'significance', which.label 
 
 ### Example 2 (using clusterProfiler)
 
+Here we use the package `clusterProfiler` [Yu et al., 2012] to perform GSOA on example set of genes. GSOAP is then applied on the obtained results.
+
 #### Load libraries
 ```S
 # Load clusterProfiler and annotation database
@@ -81,12 +83,12 @@ library(clusterProfiler)
 library(org.Hs.eg.db)
 ```
 
-#### Example example gene vector.
+#### Import example genes
 ```
 # Import example gene list
 data(geneList)
 ```
-Object 'geneList' is an example vector of gene expression fold change, whose names are gene entrez IDs, provided by clusterProfiler. For more details see clusterProfiler project [website]('https://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html').
+Object `geneList` is an example vector of gene expression fold change, whose names are gene entrez IDs, provided by clusterProfiler. For more details see clusterProfiler project ![website]('https://bioconductor.org/packages/release/bioc/vignettes/clusterProfiler/inst/doc/clusterProfiler.html').
 
 #### Perform GSOA
 Reduce the genes to a differentially expressed subset; and perform GSOA on Gene Ontology (GO) biological processes (BP)
@@ -106,10 +108,11 @@ x = enrichGO(gene = gene,
              qvalueCutoff = 0.01,
              readable = FALSE)
 
+# Convert to data frame and set BP description as rownames
 x = as.data.frame(x, row.names = x$Description)
 ```
 #### Create GSOAP layout and plot
-Create GSOAP layout using tSNE projection; decreate the scale factor to better accomodate the instances into layout space. 
+Create GSOAP layout using tSNE projection; decreate the scale factor to better accomodate the instances into the layout space. 
 ```
 l = gsoap_layout(x,
                  genes = 'geneID',
@@ -141,3 +144,4 @@ p = gsoap_plot(l,
 ## References
  * Tokar, Tomas, et al. "Differentially expressed microRNAs in lung adenocarcinoma invert effects of copy number aberrations of prognostic genes." Oncotarget 9.10 (2018): 9137.
  * Rahmati, Sara, et al. "pathDIP: an annotated resource for known and predicted human gene-pathway associations and pathway enrichment analysis." Nucleic acids research 45.D1 (2016): D419-D426.
+ * Yu, Guangchuang, et al. "clusterProfiler: an R package for comparing biological themes among gene clusters." Omics: a journal of integrative biology 16.5 (2012): 284-287.
