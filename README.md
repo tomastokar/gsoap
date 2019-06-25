@@ -72,7 +72,7 @@ gsoap_plot(layout, as.color = 'cluster', as.alpha = 'significance', which.label 
 
 ![gsoap_example](https://user-images.githubusercontent.com/46754141/59848847-292e6680-9334-11e9-884e-1b5180fb9aa9.png)
 
-### Example 2 (using clusterProfiler)
+### Example 2
 
 Here we use the R package *clusterProfiler* [Yu et al., 2012] to perform GSOA on example set of genes. GSOAP is then applied on the obtained results.
 
@@ -84,7 +84,7 @@ library(org.Hs.eg.db)
 ```
 
 #### Import example genes
-```
+```S
 # Import example gene list
 data(geneList)
 ```
@@ -92,7 +92,7 @@ Object `geneList` is an example vector of gene expression fold change, whose nam
 
 #### Perform GSOA
 Reduce the genes to a differentially expressed subset; and perform GSOA on Gene Ontology (GO) biological processes (BP)
-```
+```S
 # Reducte to differentially expressed genes
 gene = names(geneList)[abs(geneList) > 2.0]
 
@@ -112,7 +112,7 @@ x = enrichGO(gene = gene,
 x = as.data.frame(x, row.names = x$Description)
 ```
 Obtained data.frame contains:
-  * ID - ID of GO biol. proc.
+  * ID - GO biol. proc. ID
   * Description - a full name of the GO biol. proc.
   * GeneRatio - a fraction of query gene members of the given GO biol. proc. to the total number of query genes. 
   * BgRatio - a fraction of total number of genes of the given GO biol. to size of the ``gene universe''.
@@ -124,7 +124,8 @@ Obtained data.frame contains:
 
 #### Create GSOAP layout and plot
 Create GSOAP layout using tSNE projection; decreate the scale factor to better accomodate the instances into the layout space. 
-```
+
+```S
 l = gsoap_layout(x,
                  genes = 'geneID',
                  pvalues = 'p.adjust',
@@ -132,12 +133,14 @@ l = gsoap_layout(x,
                  scale.factor = 0.8,
                  no.clusters = 5)
 ```
+
 Take indices of all instances of the first cluster.
-```
+```S
 idx = which(l$cluster == 'Cluster 1')
 ```
+
 Plot GSOAP, whiile using color to highlight the cluster membership and opacity to highlight significance. In addition, add labels of instances from the first cluster.
-```
+```S
 p = gsoap_plot(l,
                as.alpha = 'significance',
                as.color = 'cluster',
