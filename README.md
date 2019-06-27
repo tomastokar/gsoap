@@ -4,7 +4,7 @@ A package for visualisation of gene set over-representation enrichment analysis.
 
 ## Features
 <p align="justify">
-Per dafault, <code>gsoap_layout</code> will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Significance of the instance is calculated as -log10(pvalue) and is used as instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
+Per default, <code>gsoap_layout</code> will calculate Jaccard distance between instances (e.g. pathways, GO terms, etc.), i.e. will measure relative overlaps between their query genes. Multidimensional scaling (other options include tSNE, CCA, Isomap) is then applied to project instances into 2-dimensional space. Circle packing is then applied to increase visual clarity of the layout. Significance of the instance is calculated as -log10(pvalue) and is used as instance weight to calculate instance closeness. Finally, cluster analysis is performed to identify clusters of instances.
 </p>
 
 Obtained layout is an R data frame that contains the following columns:
@@ -29,7 +29,7 @@ install_github("tomastokar/gsoap", dependencies=T)
 ### Example 1
 
 <p align="justify">
-Here we use example dataset provided by GSOAP. The example dataset contains results of the over-representation analysis of 72 differentially expressed genes from [Tokar et al. 2018]. The analysis was performed using Pathway Data Integration Portal (pathDIP) [Rahmati et al., 2016]. 
+Here we use the example dataset provided by GSOAP. The example dataset contains results of the over-representation analysis of 72 differentially expressed genes from [Tokar et al. 2018]. The analysis was performed using Pathway Data Integration Portal (pathDIP) [Rahmati et al., 2016]. 
 </p>
 
 #### Load GSOAP package
@@ -123,7 +123,7 @@ Obtained data frame contains:
   * Count - total number of query gene members of the given GO biol. proc. (effect size).
 
 #### Create GSOAP layout and plot
-Create GSOAP layout using tSNE projection; decreate the scale factor to better accomodate the instances into the layout space. 
+Create GSOAP layout using tSNE projection; decrease the scale factor to better accomodate the instances into the layout space. 
 
 ```S
 l = gsoap_layout(x,
@@ -139,7 +139,7 @@ Take indices of all instances of the first cluster.
 idx = which(l$cluster == 'Cluster 1')
 ```
 
-Plot GSOAP, whiile using color to highlight the cluster membership and opacity to highlight significance. In addition, add labels of instances from the first cluster.
+Plot GSOAP, while using color to highlight the cluster membership and opacity to highlight significance. In addition, add labels of instances from the first cluster.
 ```S
 p = gsoap_plot(l,
                as.alpha = 'significance',
